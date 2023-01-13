@@ -1,0 +1,20 @@
+ion-toolbar:last-child {
+    --border-width: 0!important;
+}
+ion-content{
+    
+    ion-item, ion-header, ion-toolbar{
+        --background: transparent;
+    }
+    .ion-float-right{
+        ion-text{
+            font-size: 1.2rem;
+            opacity: 0.5;
+            margin-top: 8px;
+        }
+    }
+
+    ion-item{
+        height: 60px;;
+    }
+}

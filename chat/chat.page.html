@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Chats</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-searchbar></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content appScrollbarTheme>
+
+    <ion-virtual-scroll [items]="items" approxItemHeight="60px;" *ngIf="items.length">
+        <ion-item-divider *virtualHeader="let header">
+            {{ header }}
+        </ion-item-divider>
+
+        <ion-item lines="none" *virtualItem="let i; let itemBounds = bounds;">
+            <ion-avatar slot="start">
+                <img src="http://placekitten.com/300/300" />
+            </ion-avatar>
+            <ion-label>
+                <h2>
+                    Dung
+                    <div class="ion-float-right">
+                        <ion-text>20 phút</ion-text>
+                    </div>
+                </h2>
+                <p>CASTER 3 - thêm 50 khách.</p>
+            </ion-label>
+        </ion-item>
+    </ion-virtual-scroll>
+
+  
+</ion-content>
