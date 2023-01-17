@@ -136,9 +136,6 @@
 		</ion-toolbar>
 	</ion-fab>
 	<ion-fab *ngIf="pageConfig.isShowFeature" style="top:-25px !important;" [ngClass]="{withSearch: pageConfig.isShowSearch}" class="feature" vertical="top" horizontal="end" slot="fixed">
-
-
-
 		<div *ngIf="segmentView=='s1'">
 			<div class="ion-padding">
 				<div class="c-control">
@@ -195,8 +192,8 @@
 			</ion-list-header> -->
 
 			<div class="ion-padding">
-
-				<div class="c-control">
+				<div class="ion-padding"></div>
+				<!-- <div class="c-control">
 					<label class="c-label" for="featureDate">{{'erp.app.pages.sale.sale-order.feature-date' | translate}}</label>
 					<input class="c-input" [(ngModel)]="masanImportParam.featureDate" id="featureDate" type="date">
 				</div>
@@ -211,14 +208,18 @@
 
 				<div class="c-control">
 					<ion-button [disabled]="submitAttempt" color="primary" expand="block" (click)="masanImport()"> {{'erp.app.pages.sale.sale-order.masan-import' | translate}}</ion-button>
-					<!-- shape="round" -->
-				</div>
+				</div> -->
 
 				<div class="c-control">
 					<ion-button [disabled]="submitAttempt" color="primary" expand="block" (click)="onClickImport()"> {{'erp.app.pages.sale.sale-order.click-import' | translate}}</ion-button>
 					<input class="hide-all" #importfile2 type="file" accept=".xlsx" (change)="import2($event)" />
 				</div>
-				<div class="col-control"></div>
+
+				<div class="c-control">
+					<a class="c-label" target="_blank" *ngIf="baseURL" [href]="baseURL + '/Uploads/FileTemplate/POS-import-Template.xlsx'">=> Download file template</a>
+					
+				</div>
+
 			</div>
 
 		</div>
@@ -259,6 +260,7 @@
 							<small title="{{'erp.app.pages.sale.sale-order.bp' | translate}}" class="clickable" (click)="query.IsShipBySaleMan=true; refresh(); $event.stopPropagation();" *ngIf="i.IsShipBySaleMan">
 								<ion-text color="primary">BP</ion-text>
 							</small>
+							<br>
 						</div>
 						<div class="col-name col-customerName cell">
 

@@ -20,6 +20,7 @@ import { EInvoiceService } from 'src/app/services/einvoice.service';
     styleUrls: ['sale-order.page.scss']
 })
 export class SaleOrderPage extends PageBase {
+    baseURL = ApiSetting.mainService.base;
     branchList = [];
     statusList = [];
     vehicleList = [];
@@ -189,9 +190,9 @@ export class SaleOrderPage extends PageBase {
         this.submitAttempt = true;
         this.env.publishEvent({ Code: 'app:ShowAppMessage', IsShow: true, Id: 'FileImport', Icon: 'flash', IsBlink: true, Color: 'danger', Message: 'đang import' });
 
-        let wareHouse = this.masanImportParam.wareHouse;
+        let selectedBranch = this.env.selectedBranch;
         this.pageProvider.apiPath.postImport.method = "UPLOAD";
-        this.pageProvider.apiPath.postImport.url = function () { return ApiSetting.apiDomain("SALE/Order/ImportFile?Kho=" + wareHouse) };
+        this.pageProvider.apiPath.postImport.url = function () { return ApiSetting.apiDomain("SALE/Order/ImportFile?IDBranch=" + selectedBranch) };
 
         this.pageProvider.import(event.target.files[0])
             .then((response) => {
