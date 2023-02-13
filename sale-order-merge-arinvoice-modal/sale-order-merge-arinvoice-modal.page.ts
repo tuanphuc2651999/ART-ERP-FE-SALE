@@ -10,7 +10,6 @@ import { concat, of, Subject } from 'rxjs';
 import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { lib } from 'src/app/services/static/global-functions';
 import { ApiSetting } from 'src/app/services/static/api-setting';
-import { any } from '@amcharts/amcharts5/.internal/core/util/Array';
 import { AnyComponent } from 'preact';
 
 
