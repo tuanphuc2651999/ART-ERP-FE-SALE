@@ -6,7 +6,6 @@ import { BRA_BranchProvider, SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_Veh
 import { Location } from '@angular/common';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
-import { SALE_MasanImportProvider } from 'src/app/services/custom.service';
 import { SaleOrderSplitModalPage } from '../sale-order-split-modal/sale-order-split-modal.page';
 import { SaleOrderMergeModalPage } from '../sale-order-merge-modal/sale-order-merge-modal.page';
 import { SaleOrderARInvoiceModalPage } from '../sale-order-create-arinvoice-modal/sale-order-create-arinvoice-modal.page';
@@ -41,7 +40,6 @@ export class SaleOrderPage extends PageBase {
         public statusProvider: SYS_StatusProvider,
         public shipmentProvider: SHIP_ShipmentProvider,
         public vehicleProvider: SHIP_VehicleProvider,
-        public masanImportProvider: SALE_MasanImportProvider,
         public arInvoiceProvider: AC_ARInvoiceProvider,
         public contactProvider: CRM_ContactProvider,
 
@@ -144,17 +142,18 @@ export class SaleOrderPage extends PageBase {
 
     masanImport() {
         if (this.submitAttempt) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.importing-masan','primary');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.importing-masan', 'primary');
             return;
         }
         this.submitAttempt = true;
         this.env.publishEvent({ Code: 'app:ShowAppMessage', IsShow: true, Id: 'MasanImport', Icon: 'flash', IsBlink: true, Color: 'danger', Message: 'đang import đơn Masan' });
-        this.masanImportProvider.MasanImport({
+
+        this.pageProvider.commonService.connect('GET', 'SALE/Order/MasanImport', {
             JobId: 1,
             Kho: this.masanImportParam.wareHouse,
             StartDate: this.masanImportParam.featureDate,
             EndDate: this.masanImportParam.featureDate
-        }).then((fileurl) => {
+        }).toPromise().then((fileurl) => {
             this.submitAttempt = false;
             this.env.publishEvent({ Code: 'app:ShowAppMessage', IsShow: false, Id: 'MasanImport' });
             this.pageConfig.isShowSearch = true;
@@ -171,7 +170,7 @@ export class SaleOrderPage extends PageBase {
                     this.env.showMessage(err.message, 'danger');
                 }
                 else {
-                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.import-error','danger');
+                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.import-error', 'danger');
                 }
             })
     }
@@ -184,7 +183,7 @@ export class SaleOrderPage extends PageBase {
 
     async import2(event) {
         if (this.submitAttempt) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.importing','primary');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.importing', 'primary');
             return;
         }
         this.submitAttempt = true;
@@ -206,7 +205,7 @@ export class SaleOrderPage extends PageBase {
                 this.submitAttempt = false;
                 this.env.publishEvent({ Code: 'app:ShowAppMessage', IsShow: false, Id: 'FileImport' });
                 this.refresh();
-                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.import-error','danger');
+                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.import-error', 'danger');
             })
 
 
@@ -215,7 +214,7 @@ export class SaleOrderPage extends PageBase {
     async splitSaleOrder() {
         let IDStatus = this.selectedItems[0].Status.IDStatus;
         if (!(IDStatus == 101 || IDStatus == 102 || IDStatus == 103)) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-split','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-split', 'warning');
             return;
         }
         const modal = await this.modalController.create({
@@ -236,7 +235,7 @@ export class SaleOrderPage extends PageBase {
     async mergeSaleOrders() {
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103));
         if (itemsCanNotProcess.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-merge','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-merge', 'warning');
             return;
         }
 
@@ -262,7 +261,7 @@ export class SaleOrderPage extends PageBase {
 
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-send-approve-new-draft-disapprove-only','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-send-approve-new-draft-disapprove-only', 'warning');
         }
         else {
             itemsCanNotProcess.forEach(i => {
@@ -304,7 +303,7 @@ export class SaleOrderPage extends PageBase {
                                         if (publishEventCode) {
                                             this.env.publishEvent({ Code: publishEventCode });
                                         }
-                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','warning');
+                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete', 'warning');
                                         this.submitAttempt = false;
 
                                     }).catch(err => {
@@ -329,7 +328,7 @@ export class SaleOrderPage extends PageBase {
 
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-approve-pending-only','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-approve-pending-only', 'warning');
         }
         else {
             itemsCanNotProcess.forEach(i => {
@@ -371,7 +370,7 @@ export class SaleOrderPage extends PageBase {
                                         if (publishEventCode) {
                                             this.env.publishEvent({ Code: publishEventCode });
                                         }
-                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete', 'success');
                                         this.submitAttempt = false;
 
                                     }).catch(err => {
@@ -396,7 +395,7 @@ export class SaleOrderPage extends PageBase {
 
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 103 || i.Status.IDStatus == 104));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-disapprove-pending-approved-only','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-disapprove-pending-approved-only', 'warning');
         }
         else {
             itemsCanNotProcess.forEach(i => {
@@ -438,7 +437,7 @@ export class SaleOrderPage extends PageBase {
                                         if (publishEventCode) {
                                             this.env.publishEvent({ Code: publishEventCode });
                                         }
-                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete', 'success');
                                         this.submitAttempt = false;
 
                                     }).catch(err => {
@@ -464,7 +463,7 @@ export class SaleOrderPage extends PageBase {
 
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-cancel-pending-draft-only','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-cancel-pending-draft-only', 'warning');
         }
         else {
             itemsCanNotProcess.forEach(i => {
@@ -506,7 +505,7 @@ export class SaleOrderPage extends PageBase {
                                         if (publishEventCode) {
                                             this.env.publishEvent({ Code: publishEventCode });
                                         }
-                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete', 'success');
                                         this.submitAttempt = false;
 
                                     }).catch(err => {
@@ -528,7 +527,7 @@ export class SaleOrderPage extends PageBase {
     deleteItems() {
         let itemsCanNotDelete = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
         if (itemsCanNotDelete.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-delete-new-disapprove-only','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-delete-new-disapprove-only', 'warning');
         }
         else if (itemsCanNotDelete.length) {
             this.alertCtrl.create({
@@ -571,7 +570,7 @@ export class SaleOrderPage extends PageBase {
         let OrderIds = this.selectedItems.filter(i => i.Status.IDStatus == 104 || i.Status.IDStatus == 110); //Đã duyệt || chờ giao lại
         let DebtOrderIds = this.selectedItems.filter(i => i.Status.IDStatus == 113); // Đang nợ
         if (!(OrderIds.length || DebtOrderIds.length)) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-add-to-shipment','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-add-to-shipment', 'warning');
             return;
         }
 
@@ -595,14 +594,14 @@ export class SaleOrderPage extends PageBase {
                     if (publishEventCode) {
                         this.env.publishEvent({ Code: publishEventCode });
                     }
-                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete', 'success');
                     this.loadShipmentList();
                     this.submitAttempt = false;
 
                 }).catch(err => {
                     this.submitAttempt = false;
                     this.loadShipmentList();
-                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save','danger');
+                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save', 'danger');
                     //console.log(err);
                 });
         }
@@ -614,9 +613,9 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => (i.Status.IDStatus == 101 ||i.Status.IDStatus == 102 ||i.Status.IDStatus == 103 ||i.Status.IDStatus == 110 ||i.Status.IDStatus == 111 ||i.Status.IDStatus == 112 ||i.Status.IDStatus == 115));
+        let itemsCanNotProcess = this.selectedItems.filter(i => (i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103 || i.Status.IDStatus == 110 || i.Status.IDStatus == 111 || i.Status.IDStatus == 112 || i.Status.IDStatus == 115));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-arinvoice','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-arinvoice', 'warning');
             return;
         }
 
@@ -624,7 +623,7 @@ export class SaleOrderPage extends PageBase {
             i.checked = false;
         });
         this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 104 || i.Status.IDStatus == 105 || i.Status.IDStatus == 106 || i.Status.IDStatus == 107 || i.Status.IDStatus == 108 || i.Status.IDStatus == 109 || i.Status.IDStatus == 113 || i.Status.IDStatus == 114));
-        
+
         let ids = this.selectedItems.map(m => m.Id)
 
         // ids.forEach((id, index) => {
@@ -641,23 +640,23 @@ export class SaleOrderPage extends PageBase {
             });
         }
         console.log(ids);
-        
+
         if (!ids) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-already','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-already', 'warning');
         }
         else {
             //return new Promise(resolve => {
-                this.EInvoiceServiceProvider.CreateARInvoiceFromSOs(ids).then((resp: any) => {
-                    if (resp != '') {
-                        this.env.showMessage(resp[0].errorMsg, 'warning');
-                        this.submitAttempt = false;
-                    }
-                    else {
-						this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.invoice-complete','success');
-                        //this.env.showMessage('Đã cập nhật hóa đơn điện tử thành công!', 'success');
-                        this.submitAttempt = false;
-                    }
-                })
+            this.EInvoiceServiceProvider.CreateARInvoiceFromSOs(ids).then((resp: any) => {
+                if (resp != '') {
+                    this.env.showMessage(resp[0].errorMsg, 'warning');
+                    this.submitAttempt = false;
+                }
+                else {
+                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.invoice-complete', 'success');
+                    //this.env.showMessage('Đã cập nhật hóa đơn điện tử thành công!', 'success');
+                    this.submitAttempt = false;
+                }
+            })
                 .catch(err => {
                     console.log(err);
 
@@ -673,7 +672,7 @@ export class SaleOrderPage extends PageBase {
 
         let itemsCanNotProcess = this.selectedItems.filter(i => (i.Status.IDStatus != 104));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-merge-arinvoice','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-merge-arinvoice', 'warning');
             return;
         }
 
@@ -684,19 +683,19 @@ export class SaleOrderPage extends PageBase {
         this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 104));
 
         let ids = this.selectedItems.map(m => m.Id)
-        
+
         //bổ sung các SO con (nếu có)
-        ids.forEach(id=>{
+        ids.forEach(id => {
             let subSOs = this.items.filter(ii => (ii.IDParent == id));
-            
-            if(subSOs){
+
+            if (subSOs) {
                 subSOs.forEach(so => {
                     this.selectedItems.push(so);
                     so.checked = true;
                 });
             }
         })
-        
+
         const modal = await this.modalController.create({
             component: SaleOrderMergeARInvoiceModalPage,
             swipeToClose: true,
@@ -713,13 +712,13 @@ export class SaleOrderPage extends PageBase {
     }
 
     async createSplitARInvoices() {
-        
+
         let IDStatus = this.selectedItems[0].Status.IDStatus;
         if (IDStatus != 104) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-split-arinvoice','warning');
+            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-split-arinvoice', 'warning');
             return;
         }
-        
+
         const modal = await this.modalController.create({
             component: SaleOrderARInvoiceModalPage,
             swipeToClose: true,
