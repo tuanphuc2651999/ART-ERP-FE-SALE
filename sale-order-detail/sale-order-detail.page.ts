@@ -320,15 +320,9 @@ export class SaleOrderDetailPage extends PageBase {
             super.loadedData(event, true);
         }
 
-        if (this.item.IDAddress) {
+        if (this.item._Customer) {
             this.contactProvider.search({ Take: 20, Skip: 0, Term: this.item.IDContact }).subscribe((data: any) => {
-                let contact = data.find(d => d.IDAddress == this.item.IDAddress);
-                this.contactSelected = contact;
-                data.filter(d => d.Id == this.item.IDContact).forEach(i => {
-                    if (i && this.contactListSelected.findIndex(d => d.IDAddress == i.IDAddress) == -1)
-                        this.contactListSelected.push(i);
-                });
-
+                this.contactListSelected.push(this.item._Customer);
                 this.contactSearch();
                 this.cdr.detectChanges();
             });
@@ -390,7 +384,7 @@ export class SaleOrderDetailPage extends PageBase {
             this.contactListInput$.pipe(
                 distinctUntilChanged(),
                 tap(() => this.contactListLoading = true),
-                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, Term: term ? term : this.item.IDContact }).pipe(
+                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: term ? false: true, Term: term ? term : 'BP:'+  this.item.IDContact }).pipe(
                     catchError(() => of([])), // empty list on error
                     tap(() => this.contactListLoading = false)
                 ))

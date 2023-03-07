@@ -2,11 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, SALE_OrderProvider, SYS_StatusProvider } from 'src/app/services/static/services.service';
+import { SALE_OrderProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
-import { SALE_MasanImportProvider } from 'src/app/services/custom.service';
 
 
 
@@ -25,10 +24,6 @@ export class ReceivableDebtPage extends PageBase {
 
     constructor(
         public pageProvider: SALE_OrderProvider,
-        public branchProvider: BRA_BranchProvider,
-        public statusProvider: SYS_StatusProvider,
-        public masanImportProvider: SALE_MasanImportProvider,
-
         public modalController: ModalController,
 		public popoverCtrl: PopoverController,
         public alertCtrl: AlertController,

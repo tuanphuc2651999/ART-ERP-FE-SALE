@@ -104,11 +104,6 @@
 						<a [href]="'#/'+'sale-order/'+i.Id" (click)="nav('sale-order/'+i.Id,'forward')" class="col-id cell">
 							{{i.Id}}
 						</a>
-
-						<!-- <div class="col-status cell">
-							<ion-badge [color]="i.Status.Color">{{i.Status.Name}}</ion-badge>
-						</div> -->
-
 						<div class="col-code cell" (click)="query.OrderDate=i.Query; pageConfig.isShowSearch=true; refresh()">
 							{{i.OrderDateText}}
 							<!-- <small *ngIf="i.OrderTimeText ">{{i.OrderTimeText}}</small> -->
