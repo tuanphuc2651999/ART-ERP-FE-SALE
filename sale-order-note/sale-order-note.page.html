@@ -1,10 +1,9 @@
 <ion-header>
 	<ion-toolbar>
-		<ion-buttons slot="start" class="ion-hide-sm-down_">
-			<ion-button color="dark" class="ion-hide-sm-down">
-				{{'erp.app.pages.sale.sale-order-note.page-title' | translate}}
-			</ion-button>
+		<ion-buttons slot="start">
+			<ion-back-button [text]="'Trở lại'"></ion-back-button>
 		</ion-buttons>
+		<ion-title>{{'erp.app.pages.sale.sale-order-note.page-title' | translate}}</ion-title>
 		<ion-buttons slot="end">
 			<!-- <ion-button (click)="changePrintMode()" title="{{'erp.app.pages.sale.sale-order-note.print-mode' | translate}}">
 				<ion-icon slot="icon-only" [name]="printMode == 'A4' ? 'cut-outline':'file-tray-full-outline'"></ion-icon>
@@ -55,8 +54,8 @@
 					</p>
 					<div style="display: flex;">
 						<div class="col-status cell">
-							<ion-badge [color]="i.Status.Color" [title]="i.Status.Name">
-								{{i.Status.Name}}
+							<ion-badge [color]="i._Status.Color" [title]="i._Status.Name">
+								{{i._Status.Name}}
 							</ion-badge>
 						</div>
 						<ion-text>
@@ -104,7 +103,7 @@
 
 												<td class="bol num" colspan="2">{{o.Code? o.Code : '#'+o.Id}}</td>
 												<td rowspan="7" class="topQR">
-													<div *ngIf="o.Code">{{'erp.app.pages.sale.sale-order-note.o' | translate}}:{{o.Id}}</div>
+													<div *ngIf="o.Code">SO:{{o.Id}}</div>
 													<a [href]="'#/'+'sale-order/'+o.Id" (click)="nav('sale-order/'+o.Id,'forward')">
 														<img class="qrc" [src]="o.QRC">
 													</a>
@@ -124,7 +123,7 @@
 
 											<tr>
 												<td>{{'erp.app.pages.sale.sale-order-note.customer-name' | translate}}:</td>
-												<td class="bol" colspan="2">{{o.CustomerName}} </td>
+												<td class="bol" colspan="2">{{o._Customer.Name}} </td>
 											</tr>
 
 											<tr>
@@ -139,7 +138,7 @@
 
 											<tr>
 												<td colspan="4" class=""> 
-													<span *ngIf="o.CustomerAddress">{{o.CustomerAddress}}</span>
+													<span *ngIf="o._Customer.Address">{{o._Customer.Address}}</span>
 												</td>
 											</tr>
 										</tbody>
@@ -157,7 +156,7 @@
 													<td class="cen">{{'erp.app.pages.sale.sale-order-note.uom' | translate}}</td>
 													<td class="num">{{'erp.app.pages.sale.sale-order-note.price' | translate}}</td>
 													<td class="num">{{'erp.app.pages.sale.sale-order-note.total' | translate}}</td>
-													<td class="cen">{{'erp.app.pages.sale.sale-order-note.service-charge' | translate}}</td>
+													<!-- <td class="cen">{{'erp.app.pages.sale.sale-order-note.service-charge' | translate}}</td> -->
 													<td class="num">{{'erp.app.pages.sale.sale-order-note.total-service' | translate}}</td>
 													<td class="cen">{{'erp.app.pages.sale.sale-order-note.vat' | translate}}</td>
 													<td class="num">{{'erp.app.pages.sale.sale-order-note.total-vat' | translate}}</td>
@@ -170,40 +169,46 @@
 														<td>
 															<div class="ten-sp ck"> {{i.ItemName}} </div>
 														</td>
-														<td class="cen bol"> <span> {{i.Quantity}} </span> </td>
-														<td class="cen bol"> <span> {{i.UoMName}} </span> </td>
-														<td class="num bol"> <span> {{i.UoMPriceText}} </span> </td>
-														<td class="num bol"> <span> {{i.TotalText}} </span> </td>
-														<td class="cen bol"> <span> {{i.ServiceRate}} </span> </td>
-														<td class="num bol"> <span> {{i.TotalServiceText}} </span> </td>
-														<td class="cen bol"> <span> {{i.TaxRate}} </span> </td>
-														<td class="num bol"> <span> {{i.TotalTaxText}} </span> </td>
-														<td class="num bol"> <span> {{i.TotalAfterTaxText}} </span> </td>
+														<td class="cen"> <span> {{i.ShippedQuantity}} </span> </td>
+														<td class="cen"> <span> {{i.UoMName}} </span> </td>
+														<td class="num"> <span> {{i.UoMPrice | number: '1.0-0' }} </span> </td>
+														<td class="num"> <span> {{i.TotalBeforeDiscount | number: '1.0-0' }} </span> </td>
+														<!-- <td class="cen"> <span> {{i._serviceCharge}} </span> </td> -->
+														<td class="num"> <span> {{i.CalcTotalAdditions | number: '1.0-0' }} </span> </td>
+														<td class="cen"> <span> {{i.TaxRate}} </span> </td>
+														<td class="num"> <span> {{i.Tax | number: '1.0-0' }} </span> </td>
+														<td class="num bol"> <span> {{i.CalcTotal | number: '1.0-0' }} </span> </td>
 													</tr>
 												</ng-container>
 											
-												<tr style="border-top: dashed 1px #000; border-bottom: dashed 1px #000; " >
+												<tr >
 													<td colspan="5" class="num" style="text-align: left !important;">
 														{{'erp.app.pages.sale.sale-order-note.sum-up' | translate}}
 													</td>
-													<td class="num"><b>{{o.CalcTotalText}}</b></td>
+													<td class="num"><b>{{o.TotalBeforeDiscount | number: '1.0-0' }}</b></td>
+													<!-- <td class="num"></td> -->
+													<td class="num"><b>{{o.CalcTotalAdditions | number: '1.0-0' }}</b></td>
 													<td class="num"></td>
-													<td class="num"><b>{{o.CalcTotalServiceText}}</b></td>
-													<td class="num"></td>
-													<td class="num"><b>{{o.CalcTotalTaxText}}</b></td>
-													<td class="num"><b>{{o.CalcTotalAfterTaxText}}</b></td>
+													<td class="num"><b>{{o.Tax | number: '1.0-0' }}</b></td>
+													<td class="num"><b>{{o.CalcTotal | number: '1.0-0' }}</b></td>
 												</tr>
-												<tr style="border-top: dashed 1px #000; border-bottom: dashed 1px #000; " >
-													<td colspan="10" class="num" style="text-align: left !important;">
-														{{'erp.app.pages.sale.sale-order-note.sum-up-debt' | translate}}
+												<tr *ngIf="o.DiscountFromSalesman">
+													<td colspan="9" class="num" style="text-align: left !important;">
+														Bù giá
 													</td>
-													<td class="num"><b>{{o.DebtText}}</b></td>
+													<td class="num"><b>{{o.DiscountFromSalesman | number: '1.0-0' }}</b></td>
 												</tr>
-												<tr style="border-top: dashed 1px #000; border-bottom: dashed 1px #000; " >
-													<td colspan="10" class="num" style="text-align: left !important;">
-														{{'erp.app.pages.sale.sale-order-note.sum-up-remain' | translate}}
+												<tr >
+													<td colspan="9" class="num" style="text-align: left !important;">
+														Đã thanh toán
 													</td>
-													<td class="num"><b>{{o.TotalRemainText}}</b></td>
+													<td class="num"><b>{{o.Received | number: '1.0-0' }}</b></td>
+												</tr>
+												<tr >
+													<td colspan="9" class="num" style="text-align: left !important;">
+														Còn lại
+													</td>
+													<td class="num"><b>{{o.Debt | number: '1.0-0'}}</b></td>
 												</tr>
 												<!-- <tr style="border-top: dashed 1px #000;" >
 													<td colspan="6" class="num">

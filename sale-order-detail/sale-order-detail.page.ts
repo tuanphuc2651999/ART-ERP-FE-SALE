@@ -424,7 +424,7 @@ export class SaleOrderDetailPage extends PageBase {
             this.resetLine(line);
 
             line._itemData = selectedItem;
-            line.TaxRate = selectedItem.Tax; //Tax by Item
+            line.TaxRate = selectedItem.SalesTaxInPercent; //Tax by Item
 
             this.item.OriginalPromotion = this.item.OriginalPromotion ? parseFloat(this.item.OriginalPromotion) : 0;
             line.OriginalPromotion = this.item.OriginalPromotion;//Lấy theo order
@@ -870,5 +870,9 @@ export class SaleOrderDetailPage extends PageBase {
 
         // this.selectedItems = [];
         // this.refresh();
+    }
+
+    closeOrder(){
+        this.nav('sale-order/close-order/'+ this.item.Id);
     }
 }

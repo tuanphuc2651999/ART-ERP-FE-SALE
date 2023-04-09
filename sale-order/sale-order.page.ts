@@ -69,6 +69,7 @@ export class SaleOrderPage extends PageBase {
 
     preLoadData(event) {
         this.query.IDOwner = this.pageConfig.canViewAllData ? 'all' : this.env.user.StaffID;
+        this.query.IDParent = null;
         //this.query.OrderDate = this.pageConfig.canViewAllData? 'all' : new Date();
         //this.query.IDStatus = '[1,2,3]';
         if (!this.sort.Id) {
@@ -89,11 +90,6 @@ export class SaleOrderPage extends PageBase {
         this.loadVehicleList();
         this.loadShipmentList();
 
-    }
-
-    loadData(event) {
-        this.pageProvider.apiPath.getList.url = function () { return ApiSetting.apiDomain("SALE/Order/List") };
-        super.loadData(event);
     }
 
     loadedData(event) {
@@ -212,7 +208,7 @@ export class SaleOrderPage extends PageBase {
     }
 
     async splitSaleOrder() {
-        let IDStatus = this.selectedItems[0].Status.IDStatus;
+        let IDStatus = this.selectedItems[0].IDStatus;
         if (!(IDStatus == 101 || IDStatus == 102 || IDStatus == 103)) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-split', 'warning');
             return;
@@ -233,7 +229,7 @@ export class SaleOrderPage extends PageBase {
     }
 
     async mergeSaleOrders() {
-        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103));
+        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102 || i.IDStatus == 103));
         if (itemsCanNotProcess.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-merge', 'warning');
             return;
@@ -259,7 +255,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
+        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-send-approve-new-draft-disapprove-only', 'warning');
         }
@@ -267,7 +263,7 @@ export class SaleOrderPage extends PageBase {
             itemsCanNotProcess.forEach(i => {
                 i.checked = false;
             });
-            this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
+            this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 101 || i.IDStatus == 102));
 
             this.alertCtrl.create({
                 header: 'Gửi duyệt ' + this.selectedItems.length + ' đơn hàng',
@@ -326,7 +322,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
+        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 103 || i.IDStatus == 110));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-approve-pending-only', 'warning');
         }
@@ -334,7 +330,7 @@ export class SaleOrderPage extends PageBase {
             itemsCanNotProcess.forEach(i => {
                 i.checked = false;
             });
-            this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
+            this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 103 || i.IDStatus == 110));
 
             this.alertCtrl.create({
                 header: 'Duyệt ' + this.selectedItems.length + ' đơn hàng',
@@ -393,7 +389,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 103 || i.Status.IDStatus == 104));
+        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 103 || i.IDStatus == 104));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-disapprove-pending-approved-only', 'warning');
         }
@@ -401,7 +397,7 @@ export class SaleOrderPage extends PageBase {
             itemsCanNotProcess.forEach(i => {
                 i.checked = false;
             });
-            this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 103 || i.Status.IDStatus == 104));
+            this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 103 || i.IDStatus == 104));
 
             this.alertCtrl.create({
                 header: 'Trả lại ' + this.selectedItems.length + ' đơn hàng',
@@ -461,7 +457,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
+        let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102 || i.IDStatus == 103 || i.IDStatus == 110));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-cancel-pending-draft-only', 'warning');
         }
@@ -469,7 +465,7 @@ export class SaleOrderPage extends PageBase {
             itemsCanNotProcess.forEach(i => {
                 i.checked = false;
             });
-            this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103 || i.Status.IDStatus == 110));
+            this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 101 || i.IDStatus == 102 || i.IDStatus == 103 || i.IDStatus == 110));
 
             this.alertCtrl.create({
                 header: 'HỦY ' + this.selectedItems.length + ' đơn hàng',
@@ -525,7 +521,7 @@ export class SaleOrderPage extends PageBase {
     }
 
     deleteItems() {
-        let itemsCanNotDelete = this.selectedItems.filter(i => !(i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
+        let itemsCanNotDelete = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102));
         if (itemsCanNotDelete.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-delete-new-disapprove-only', 'warning');
         }
@@ -549,7 +545,7 @@ export class SaleOrderPage extends PageBase {
                             itemsCanNotDelete.forEach(i => {
                                 i.checked = false;
                             });
-                            this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 101 || i.Status.IDStatus == 102));
+                            this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 101 || i.IDStatus == 102));
                             super.deleteItems();
                         }
                     }
@@ -567,8 +563,8 @@ export class SaleOrderPage extends PageBase {
     }
 
     addSOtoShipment(s) {
-        let OrderIds = this.selectedItems.filter(i => i.Status.IDStatus == 104 || i.Status.IDStatus == 110); //Đã duyệt || chờ giao lại
-        let DebtOrderIds = this.selectedItems.filter(i => i.Status.IDStatus == 113); // Đang nợ
+        let OrderIds = this.selectedItems.filter(i => i.IDStatus == 104 || i.IDStatus == 110); //Đã duyệt || chờ giao lại
+        let DebtOrderIds = this.selectedItems.filter(i => i.IDStatus == 113); // Đang nợ
         if (!(OrderIds.length || DebtOrderIds.length)) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-add-to-shipment', 'warning');
             return;
@@ -613,7 +609,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => (i.Status.IDStatus == 101 || i.Status.IDStatus == 102 || i.Status.IDStatus == 103 || i.Status.IDStatus == 110 || i.Status.IDStatus == 111 || i.Status.IDStatus == 112 || i.Status.IDStatus == 115));
+        let itemsCanNotProcess = this.selectedItems.filter(i => (i.IDStatus == 101 || i.IDStatus == 102 || i.IDStatus == 103 || i.IDStatus == 110 || i.IDStatus == 111 || i.IDStatus == 112 || i.IDStatus == 115));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-arinvoice', 'warning');
             return;
@@ -622,7 +618,7 @@ export class SaleOrderPage extends PageBase {
         itemsCanNotProcess.forEach(i => {
             i.checked = false;
         });
-        this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 104 || i.Status.IDStatus == 105 || i.Status.IDStatus == 106 || i.Status.IDStatus == 107 || i.Status.IDStatus == 108 || i.Status.IDStatus == 109 || i.Status.IDStatus == 113 || i.Status.IDStatus == 114));
+        this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 104 || i.IDStatus == 105 || i.IDStatus == 106 || i.IDStatus == 107 || i.IDStatus == 108 || i.IDStatus == 109 || i.IDStatus == 113 || i.IDStatus == 114));
 
         let ids = this.selectedItems.map(m => m.Id)
 
@@ -670,7 +666,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
 
-        let itemsCanNotProcess = this.selectedItems.filter(i => (i.Status.IDStatus != 104));
+        let itemsCanNotProcess = this.selectedItems.filter(i => (i.IDStatus != 104));
         if (itemsCanNotProcess.length == this.selectedItems.length) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-merge-arinvoice', 'warning');
             return;
@@ -680,7 +676,7 @@ export class SaleOrderPage extends PageBase {
             i.checked = false;
         });
 
-        this.selectedItems = this.selectedItems.filter(i => (i.Status.IDStatus == 104));
+        this.selectedItems = this.selectedItems.filter(i => (i.IDStatus == 104));
 
         let ids = this.selectedItems.map(m => m.Id)
 
@@ -713,7 +709,7 @@ export class SaleOrderPage extends PageBase {
 
     async createSplitARInvoices() {
 
-        let IDStatus = this.selectedItems[0].Status.IDStatus;
+        let IDStatus = this.selectedItems[0].IDStatus;
         if (IDStatus != 104) {
             this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-split-arinvoice', 'warning');
             return;
@@ -732,5 +728,54 @@ export class SaleOrderPage extends PageBase {
 
         this.selectedItems = [];
         this.refresh();
+    }
+
+    toggleRow(i, event) {
+       
+        
+        if (!i._HasSubOrder) {
+            return;
+        }
+        event.stopPropagation();
+        
+        if (i._ShowSubOrder) {
+            i._ShowSubOrder = false;
+            let subOrders = this.items.filter(d => d.IDParent == i.Id);
+
+            subOrders.forEach(it => {
+                const index = this.items.indexOf(it, 0);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                    console.log(index);
+
+                }
+                //this.items = [...this.items];
+            });
+
+        }
+        else {
+            let idx = this.items.indexOf(i, 0) + 1;
+
+            if (i._SubOrders) {
+                this.items = [...this.items.slice(0, idx), ...i._SubOrders, ...this.items.slice(idx)];
+                i._ShowSubOrder = true;
+            }
+            else {
+                this.env.showLoading('Đang tải dữ liệu...', this.pageProvider.read({ IDParent: i.Id }))
+                    .then((result: any) => {
+                        i._SubOrders = result.data;
+                        this.items = [...this.items.slice(0, idx), ...i._SubOrders, ...this.items.slice(idx)];
+                        i._ShowSubOrder = true;
+
+                    }).catch(err => {
+                        if (err.message != null) {
+                            this.env.showMessage(err.message, 'danger');
+                        }
+                        else {
+                            this.env.showTranslateMessage('erp.app.pages.bi.sales-report.message.can-not-get-data', 'danger');
+                        }
+                    });
+            }
+        }
     }
 }

@@ -1,3 +1,9 @@
+.col-id {
+    justify-content: flex-start;
+    max-width: 90px;
+    min-width: 90px;
+}
+
 .col-status {
     justify-content: flex-start;
 }
@@ -40,10 +46,7 @@
     color: var(--ion-color-primary) !important;
 }
 
-section.table .col-id {
-    max-width: 90px;
-    min-width: 90px;
-}
+
 
 .feature{
     ion-item{
