@@ -10,7 +10,7 @@
 				<ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Id" name="search" color="primary"></ion-icon>
 			</div>
-
+			
 			<div class="col-status cell" (click)="sortToggle('IDStatus')">
 				{{'erp.app.pages.sale.sale-order.id-status' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.IDStatus" [name]="sort.IDStatus == 'IDStatus'?'arrow-down': 'arrow-up'"></ion-icon>
@@ -64,11 +64,12 @@
 		<form (submit)="refresh()" action="#">
 			<header class="filter" *ngIf="pageConfig.isShowSearch">
 				<div class="col-checkbox cell"></div>
-				<div class="col-code col-id cell">
+				<div class="col-id cell">
 					<input placeholder="{{'erp.app.pages.sale.sale-order.id-short' | translate}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Id" class="c-input" [ngClass]="{active: query.Id}" type="">
 					<ion-icon class="min-btn" (click)="query.Id=''; refresh()" *ngIf="query.Id" name="close-circle-outline"></ion-icon>
 				</div>
-				<div class="col-code col-status cell">
+				
+				<div class="col-status cell">
 					<select (change)="refresh()" class="c-input c-dropdown" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.IDStatus" [ngClass]="{active: query.IDStatus}">
 						<option value="">{{'erp.app.pages.sale.sale-order.all-option' | translate}}</option>
 						<option value="[103, 110]">{{'erp.app.pages.sale.sale-order.to-approve' | translate}}</option>
@@ -83,7 +84,7 @@
 					<input placeholder="{{'erp.app.pages.sale.sale-order.order-date' | translate}}" (change)="refresh()" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.OrderDate" class="c-input" [ngClass]="{active: query.OrderDate}" type="date">
 					<ion-icon class="min-btn" (click)="query.OrderDate=''; refresh()" *ngIf="query.OrderDate" name="close-circle-outline"></ion-icon>
 				</div>
-				<div class="col-code col-name cell">
+				<div class="col-name cell">
 					<input placeholder="{{'erp.app.pages.sale.sale-order.customer-name' | translate}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.CustomerName" class="c-input" [ngClass]="{active: query.CustomerName}" type="text">
 					<ion-icon class="min-btn" (click)="query.CustomerName=''; refresh()" *ngIf="query.CustomerName" name="close-circle-outline"></ion-icon>
 
@@ -227,17 +228,24 @@
 
 	<div *ngIf="items.length && pageConfig.showSpinner==false">
 		<section class="table">
-			<ion-virtual-scroll [items]="items" approxItemHeight="27px">
-				<ng-container *virtualItem="let i; let itemBounds = bounds; let j = index;">
-					<div class="row" [ngClass]="{odd: j % 2 != 0}" [ngClass]="{selected: i.checked}" [ngStyle]="{'border-left': 'solid 5px rgba(var(--ion-color-' + i.Status.Color + '-rgb, 0, 0, 0), 1)'}">
+			<!-- <ion-virtual-scroll [items]="items" approxItemHeight="27px">
+				<ng-container *virtualItem="let i; let itemBounds = bounds; let j = index;"> -->
+					
+					<div class="row" [ngClass]="{selected: i.checked}" [ngClass]="{bold: i._HasSubOrder}" *ngFor="let i of items">
 						<div class="col-checkbox cell">
 							<input (click)="changeSelection(i, $event)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox">
 						</div>
-						<a [routerLink]="['/'+pageConfig.pageName+'/'+i.Id]" class="col-id cell">{{i.Id}}</a>
-
-						<div class="col-status cell">
-							<ion-badge [color]="i.Status.Color" [title]="i.Status.Name">
-								{{i.Status.Name}}
+						
+						<div  class="col-id cell">
+							<ion-icon (click)="toggleRow(i, $event);" class="min-btn clickable" [name]="i._HasSubOrder? (!i._ShowSubOrder? 'chevron-forward-outline':'chevron-down-outline') : '' "></ion-icon> <span class="spacing" *ngIf="i.IDParent"></span>
+							<a (click)="nav(this.pageConfig.pageName+'/'+i.Id,'forward')" [routerLink]="['/'+pageConfig.pageName+'/'+i.Id]">{{i.Id}}</a>
+						</div>
+						<div class="col-status cell" >
+							<!-- <ion-text [color]="i._Status.Color" [title]="i._Status.Name">
+								{{i._Status.Name}}
+							</ion-text> -->
+							<ion-badge [color]="i._Status.Color" [title]="i._Status.Name">
+								{{i._Status.Name}}
 							</ion-badge>
 							<ng-container *ngFor="let s of i.ShipmentIds">
 
@@ -246,10 +254,10 @@
 								</small>
 
 							</ng-container>
-
 						</div>
+						<div class="col-code col-orderDate cell"  *ngIf="i.IDParent"></div>
 
-						<div class="col-code col-orderDate cell" (click)="query.OrderDate=i.Query; pageConfig.isShowSearch=true; refresh()">
+						<div class="col-code col-orderDate cell" *ngIf="!i.IDParent" (click)="query.OrderDate=i.Query; pageConfig.isShowSearch=true; refresh()">
 							{{i.OrderDateText}}
 							<small *ngIf="i.OrderTimeText != '00:00' ">{{i.OrderTimeText}}</small>
 							<small title="{{'erp.app.pages.sale.sale-order.sample' | translate}}" class="clickable" (click)="query.IsSampleOrder=true; refresh(); $event.stopPropagation();" *ngIf="i.IsSampleOrder">
@@ -261,7 +269,7 @@
 						</div>
 						<div class="col-name col-customerName cell">
 
-							<span title="{{'erp.app.pages.sale.sale-order.view-order-detail' | translate}}" (click)="nav('sale-order/'+i.Id,'forward')">{{i.CustomerName}}
+							<span *ngIf="!i.IDParent" title="{{'erp.app.pages.sale.sale-order.view-order-detail' | translate}}" (click)="nav('sale-order/'+i.Id,'forward')">{{i._Customer.Name}}
 								<small title="{{'erp.app.pages.sale.sale-order.find-with-contact-id' | translate}}" (click)="query.CustomerName='C:'+i.IDContact; pageConfig.isShowSearch=true; refresh()">
 									{{i.IDContact}}
 								</small>
@@ -287,16 +295,17 @@
 
 
 
-							<small class="address">
-								<ion-text color="dark"> <span>{{i.AddressLine1}}</span> <span *ngIf="i.AddressLine2"> {{i.AddressLine2}}</span> </ion-text>
+							<small *ngIf="!i.IDParent" class="address">
+								<ion-text color="dark"> <span>{{i._Customer.Address.AddressLine1}}</span> <span *ngIf="i._Customer.Address.AddressLine2"> {{i._Customer.Address.AddressLine2}}</span> </ion-text>
 							</small>
 						</div>
-						<div class="col-code col-saleMan cell"> {{i.Saleman? i.Saleman.FullName :''}}</div>
-						<div class="col-code cell money"><span *ngIf="i.TotalAfterTax">{{i.TotalAfterTaxText}}</span><span *ngIf="!i.TotalAfterTax">{{i.OriginalTotalAfterTaxText}}</span></div>
+						<div class="col-code col-saleMan cell"> {{i._Saleman? i._Saleman.FullName :''}}</div>
+						<div class="col-code cell money"><span *ngIf="i.TotalAfterTax">{{i.TotalAfterTax | number: '1.0-0'}}</span><span *ngIf="!i.TotalAfterTax">{{i.OriginalTotalAfterTax | number: '1.0-0'}}</span></div>
 						<div class="col-code col-vendorCode cell">{{i.Code}}</div>
 					</div>
-				</ng-container>
-			</ion-virtual-scroll>
+
+				<!-- </ng-container>
+			</ion-virtual-scroll> -->
 		</section>
 
 	</div>

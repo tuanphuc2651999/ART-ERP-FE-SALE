@@ -1,0 +1,13 @@
+.full-screen{
+    min-height: calc(100vh - 97px);
+}
+
+.table-contain{
+    
+    max-width: 1072px;
+    
+    // min-height: calc(100vh - 146px);
+    .table{
+        min-width: 980px;
+    }
+}

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, CRM_ContactProvider, SALE_OrderProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, CRM_ContactProvider, SALE_OrderDetailProvider, SALE_OrderProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import QRCode from 'qrcode'
@@ -18,9 +18,10 @@ export class SaleOrderNotePage extends PageBase {
     statusList = [];
     branch;
     customer;
-    
+
     constructor(
         public pageProvider: SALE_OrderProvider,
+        public saleOrderDetailProvider: SALE_OrderDetailProvider,
         public contactProvider: CRM_ContactProvider,
         public branchProvider: BRA_BranchProvider,
         public modalController: ModalController,
@@ -32,11 +33,11 @@ export class SaleOrderNotePage extends PageBase {
         public route: ActivatedRoute,
     ) {
         super();
-        this.pageConfig.isShowFeature = true;
+        
         this.pageConfig.pageName = 'sale-order-note';
         this.id = this.route.snapshot.paramMap.get('id');
-
-        this.query.Id = '[985, 1616]'
+        this.pageConfig.isShowFeature = this.id? false:true;
+        
         this.query.IDStatus = '[104, 105, 109, 113, 114]'; // đã duyệt/đã giao việc/đã giao hàng/done/còn nợ
     }
 
@@ -45,24 +46,19 @@ export class SaleOrderNotePage extends PageBase {
 
     preLoadData(event) {
         Promise.all([
-            this.env.getStatus('SALE'),
+            this.env.getStatus('SalesOrder'),
         ]).then((values: any) => {
             this.statusList = values[0];
             super.preLoadData(event);
         });
-        // this.statusProvider.read({ IDParent: 11 }).then(response => {
-        //   this.statusList = response['data'];
-        //   super.preLoadData(event);
-
-        // });
     }
 
     loadedData(event) {
-        super.loadedData(event);
-        if (window.location.host.indexOf('artlogistics') > -1) {
-			this.isShowPackingUoM = false;
-		}
         
+        if (window.location.host.indexOf('artlogistics') > -1) {
+            this.isShowPackingUoM = false;
+        }
+
         this.items.forEach(i => {
             i.OrderDateText = lib.dateFormat(i.OrderDate, 'dd/mm/yy hh:MM');
             i.ExpectedReceiptDateText = lib.dateFormat(i.ExpectedReceiptDate, 'dd/mm/yy hh:MM');
@@ -70,11 +66,10 @@ export class SaleOrderNotePage extends PageBase {
         });
 
         if (this.id) {
-            this.item = this.items.filter(d => d.Id == this.id)
-            if (this.item.length != 0) {
-                this.loadSaleOrderNote({ Id: this.id , IDBranch: this.item[0]?.IDBranch, IDContact: this.item[0]?.IDContact});
-            }
+            this.loadSaleOrderNote({ Id: this.id });
         }
+
+        super.loadedData(event);
     }
 
 
@@ -85,127 +80,169 @@ export class SaleOrderNotePage extends PageBase {
         this.selectedSaleOrderID = i.Id;
         this.id = this.selectedSaleOrderID;
 
-        let newURL = `#/${this.pageConfig.pageName}/${this.id}`;// '#'+this.pageConfig.pageName + '/' + this.id;
+        let newURL = `#/sale-order-note/${this.id}`;
         history.pushState({}, null, newURL);
 
-        this.submitAttempt = true;
+        this.env.showLoading('Đang tạo bảng kê', this.pageProvider.read({ IDParent: this.id }))
+        .then(resp => {
+            let SOList = resp['data'];
+            SOList = SOList.filter(d=>d.Status != 'Cancelled');
+            
+            let queryLines = SOList.map(m => m.Id);
+            queryLines.push(parseInt(this.id));
 
-        this.loadingController.create({
-            cssClass: 'my-custom-class',
-            message: 'Đang tạo phiếu bán hàng...'
-        }).then(loading => {
-            loading.present();
+            this.saleOrderDetailProvider.read({ IDOrder: JSON.stringify(queryLines) }).then(rows => {
+                let allLines = rows['data'];
+                let helper = {};
 
-            this.pageProvider.getAnItem(i.Id).then(resp => {
-                this.sheets = [];
-                this.sheets.push(resp);
+                allLines = allLines.reduce(function (r, o) {
+                    var key = o.IDUoM + '-' + o.UoMPrice;
 
-                    this.branchProvider.getAnItem(i.IDBranch).then((branch: any) => {
-                      this.branch = branch;
+                    if (!helper[key]) {
+                        helper[key] = Object.assign({}, o); // create a copy of o
+                        r.push(helper[key]);
+                    } else {
+                        helper[key].Quantity += o.Quantity;
+                        helper[key].ShippedQuantity += o.ShippedQuantity;
+                    }
 
-                      this.contactProvider.getAnItem(i.IDContact).then((customer: any) => {
-                        this.customer = customer;
-  
-                        for (let si = 0; si < this.sheets.length; si++) {
-                            const o = this.sheets[si];
-                            const so = this.items.filter(d => d.Id == o.Id);
-                            // o.BranchName = so[0].BranchName;
-        
-                            o.BranchName = so[0].BranchName;
-                            o.BranchLogoURL = this.branch?.LogoURL;
-                            o.BranchAddress = this.branch?.Address;
-                            o.CustomerAddress = this.customer?.BillingAddress;
-        
-                            o.CustomerName = so[0].CustomerName;
-                            o.WorkPhone = so[0].WorkPhone;
-        
-                            o.OrderDateText = lib.dateFormat(o.OrderDate, 'dd/mm/yy hh:MM');
-                            o.StatusText = lib.getAttrib(o.IDStatus, this.env.statusList, 'Name', 'NA', 'Id');
-                            
-                            o.CalcTotal = 0;
-                            o.CalcTotalService = 0;
-                            o.CalcTotalTax = 0;
-                            o.CalcTotalAfterTax = 0;
-        
-                            QRCode.toDataURL('PO:' + o.Id, { errorCorrectionLevel: 'H', version: 2, width: 500, scale: 20, type: 'image/webp' }, function (err, url) {
-                                o.QRC = url;
-                            })
-        
-                            o.OrderLines.sort((a, b) => (parseFloat(a.ItemSort) - parseFloat(b.ItemSort)));
-                            o.OrderLines.forEach(l => {
-                                l.UoMPriceText = lib.formatMoney(l.UoMPrice, 0);
-                                l.TotalBeforeDiscountText = lib.formatMoney(l.TotalBeforeDiscount, 0);
-                                l.TotalDiscountText = lib.formatMoney(l.TotalDiscount, 0);
-                                l.TotalAfterDiscountText = lib.formatMoney(l.TotalAfterDiscount, 0);
-                                l.TotalAfterTaxText = lib.formatMoney(l.TotalAfterTax, 0);
-        
-                                // Phí Phục Vụ ( hoặc là theo phí phục vụ từ server, hoặc là 5% )
-                                l.ServiceRate = l.ServiceRate ? l.ServiceRate : 5;
-        
-                                // Đơn giá * Số lượng
-                                l.Total = l.UoMPrice * l.Quantity;
-                                l.TotalText = lib.formatMoney(l.Total, 0);
-        
-                                // Thành tiền phục vụ
-                                l.TotalService = (l.Total * l.ServiceRate) / 100 ;
-                                l.TotalServiceText = lib.formatMoney(l.TotalService, 0);
-        
-                                // Thành tiền VAT = (Thành tiền * %VAT)    //Note: Thành tiền = UoMPrice * Quantity (Service Charge Included)
-                                l.TotalTax = (l.Total  * l.TaxRate) / 100;
-                                l.TotalTaxText = lib.formatMoney(l.TotalTax, 0);
+                    return r;
+                }, []);
+
+                this.pageProvider.getAnItem(i.Id).then((resp:any) => {
+                    SOList.push(resp)
+                    
+                    
+                    resp.Received = SOList?.map(x => x.Received).reduce((a, b) => (+a) + (+b), 0);
+                    console.log(resp);
+                    
+                    this.sheets = [resp];
+    
+                    this.branchProvider.getAnItem(resp['IDBranch']).then((branch: any) => {
+                        this.branch = branch;
+    
+                        this.contactProvider.getAnItem(resp['IDContact']).then((customer: any) => {
+                            this.customer = customer;
+    
+                            for (let si = 0; si < this.sheets.length; si++) {
+                                let o = this.sheets[si];
+                                o.BranchName = this.branch?.Name;
+                                o.BranchLogoURL = this.branch?.LogoURL;
+                                o.BranchAddress = this.branch?.Address;
+                                o.CustomerAddress = this.customer?.BillingAddress;
+    
+                                o.CustomerName = this.customer?.CustomerName;
+                                o.WorkPhone = this.customer?.WorkPhone;
+    
+                                o.OrderDateText = lib.dateFormat(o.OrderDate, 'dd/mm/yy hh:MM');
+                                o.StatusText = lib.getAttrib(o.IDStatus, this.env.statusList, 'Name', 'NA', 'Id');
+                                o._Status = this.statusList.find(d => d.Id == o.IDStatsu || (o.Status && d.Code == o.Status));
+                              
+    
+                                QRCode.toDataURL('SO:' + o.Id, { errorCorrectionLevel: 'H', version: 2, width: 500, scale: 20, type: 'image/webp' }, function (err, url) {
+                                    o.QRC = url;
+                                })
                                 
-                                //Tổng tiền sau Thuế của 1 Order Line
-                                l.TotalAfterTax = l.Total + l.TotalTax
-                                l.TotalAfterTaxText = lib.formatMoney(l.TotalAfterTax, 0);
-        
-                                o.CalcTotal += (l.Total);
-                                o.CalcTotalService += (l.TotalService);
-                                o.CalcTotalTax += (l.TotalTax);
-                                o.CalcTotalAfterTax += (l.TotalAfterTax);
-        
-                            });
-        
-                            o.CalcTotalText = lib.formatMoney(o.CalcTotal, 0);
-                            o.CalcTotalServiceText = lib.formatMoney(o.CalcTotalService, 0);
-                            o.CalcTotalTaxText = lib.formatMoney(o.CalcTotalTax, 0);
-                            o.CalcTotalAfterTaxText = lib.formatMoney(o.CalcTotalAfterTax, 0);
-        
-                            o.TotalRemain = o.TotalAfterTax - o.Debt;
-                            o.TotalRemainText = lib.formatMoney(o.TotalRemain, 0);
-        
-                            o.TotalBeforeDiscountText = lib.formatMoney(o.TotalBeforeDiscount, 0);
-                            o.TotalDiscountText = lib.formatMoney(o.TotalDiscount, 0);
-                            o.TotalAfterDiscountText = lib.formatMoney(o.TotalAfterDiscount, 0);
-                            o.TaxText = lib.formatMoney(o.Tax, 0);
-                            o.DebtText = lib.formatMoney(o.Debt, 0);
-                            o.TotalAfterTaxText = lib.formatMoney(o.TotalAfterTax, 0);
-                            o.DocTienBangChu = this.DocTienBangChu(o.TotalAfterTax);
-                        };
-                      });
+                                o.OrderLines = allLines;
+                                this.calcOrder(o);
+                                
+                                
+                                o.DocTienBangChu = this.DocTienBangChu(o.Debt);
+                            };
+
+                            setTimeout(() => {
+                                this.calcPageBreak();
+                            }, 100);
+                        });
                     });
+    
+    
+                    
+    
+                }).catch(err => {
+                    console.log(err);
+                    if (err.message != null)
+                        this.env.showMessage(err.message, 'danger');
+                    else
+                        this.env.showMessage('Không tạo được bảng kê, xin vui lòng kiểm tra lại.', 'danger');
+                });
 
-                this.submitAttempt = false;
-                if (loading) loading.dismiss();
-                setTimeout(() => {
-                    this.calcPageBreak();
-                }, 100);
+                // let itemIds = allLines.map(m => m.IDItem);
+                // this.itemProvider.search({ Id: JSON.stringify(itemIds), IDSO: this.id }).toPromise().then((resp: any) => {
+                //     this.preLoadItems = resp;
 
-            }).catch(err => {
-                console.log(err);
-                if (err.message != null) {
-                    this.env.showMessage(err.message, 'danger');
-                }
-                else {
-                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-order','danger');
-                }
-                this.submitAttempt = false;
-                if (loading) loading.dismiss();
-            });
+                //     super.preLoadData(event);
+                // })
 
-        });
+            })
+
+        })
+
+            
+
     }
 
+    private calcOrder(o) {
+        
+        o.TotalBeforeDiscount = 0;
+        o.TotalDiscount = 0;
+        o.Tax = 0;
+        o.TotalAfterTax = 0;
+        o.CalcTotalAdditions = 0;
+        o.CalcTotal = 0;
+        o.DiscountFromSalesman = 0;
+        o._TotalAfterDiscountFromSalesman = 0;
 
+        for (let line of o.OrderLines) {
+
+            line._serviceCharge = 0;
+            if (o.IDBranch == 174 //W-Cafe
+                || o.IDBranch == 17 //The Log
+                || (o.IDBranch == 416) //Gem Cafe && set menu  && line._item.IDMenu == 218
+            ) {
+                line._serviceCharge = 5;
+            }
+
+            //Parse data + Tính total
+            line.UoMPrice = line.IsPromotionItem ? 0 : parseFloat(line.UoMPrice) || 0;
+            line.TaxRate = parseFloat(line.TaxRate) || 0;
+            line.ShippedQuantity = parseFloat(line.ShippedQuantity) || 0;
+
+            line.TotalBeforeDiscount = line.UoMPrice * line.ShippedQuantity;
+            o.TotalBeforeDiscount += line.TotalBeforeDiscount;
+
+            //line.Promotion
+            line.Discount1 = line.IsPromotionItem ? 0 : parseFloat(line.Discount1) || 0;
+            line.Discount2 = line.IsPromotionItem ? 0 : parseFloat(line.Discount2) || 0;
+            line.DiscountByItem = line.Discount1 + line.Discount2;
+            line.DiscountByGroup = 0;
+            line.DiscountByLine = line.DiscountByItem + line.DiscountByGroup;
+            line.DiscountByOrder = 0;
+            line.TotalDiscount = line.DiscountByLine + line.DiscountByOrder;
+            o.TotalDiscount += line.TotalDiscount;
+
+            line.TotalAfterDiscount = line.TotalBeforeDiscount - line.TotalDiscount;
+            line.Tax = line.TotalAfterDiscount * (line.TaxRate / 100.0);
+            o.Tax += line.Tax;
+            line.TotalAfterTax = line.TotalAfterDiscount + line.Tax;
+            o.TotalAfterTax += line.TotalAfterTax;
+
+            line.CalcTotalAdditions = line.TotalAfterDiscount * (line._serviceCharge / 100.0) * (1 + line.TaxRate / 100.0);
+            o.CalcTotalAdditions += line.CalcTotalAdditions;
+
+
+            line.CalcTotal = line.TotalAfterTax + line.CalcTotalAdditions;
+            o.CalcTotal += line.CalcTotal;
+
+            line.DiscountFromSalesman = parseFloat(line.DiscountFromSalesman) || 0;
+            o.DiscountFromSalesman += line.DiscountFromSalesman;
+
+            line._TotalAfterDiscountFromSalesman = line.CalcTotal - line.DiscountFromSalesman;
+            o._TotalAfterDiscountFromSalesman += line._TotalAfterDiscountFromSalesman;
+        }
+
+        o.Debt = o._TotalAfterDiscountFromSalesman - o.Received;
+    }
 
 
 
@@ -409,6 +446,6 @@ export class SaleOrderNotePage extends PageBase {
         }
 
         this.refresh();
-    }    
+    }
 
 }

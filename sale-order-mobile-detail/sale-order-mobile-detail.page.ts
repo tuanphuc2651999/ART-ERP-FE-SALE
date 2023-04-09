@@ -293,7 +293,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
 
                 let ids = this.item.OrderLines.map(i => i.IDItem);
                 if (ids.length) {
-                    this.itemProvider.search({ IgnoredBranch: true, AllUoM: true, Id: JSON.stringify(ids) }).toPromise().then((result: any) => {
+                    this.itemProvider.search({ IDSO: this.item.Id, IgnoredBranch: true, AllUoM: true, Id: JSON.stringify(ids) }).toPromise().then((result: any) => {
                         result.forEach(i => {
                             if (this.itemListSelected.findIndex(d => d.Id == i.Id) == -1) {
                                 this.itemListSelected.push(i);
@@ -416,7 +416,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
             this.itemListInput$.pipe(
                 distinctUntilChanged(),
                 tap(() => this.itemListLoading = true),
-                switchMap(term => this.itemProvider.search({ Take: 20, Skip: 0, Term: term }).pipe(
+                switchMap(term => this.itemProvider.search({ IDSO: this.item.Id, Take: 20, Skip: 0, Term: term }).pipe(
                     catchError(() => of([])), // empty list on error
                     tap(() => this.itemListLoading = false)
                 ))
@@ -435,7 +435,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
             this.resetLine(line);
 
             line._itemData = selectedItem;
-            line.TaxRate = selectedItem.Tax; //Tax by Item
+            line.TaxRate = selectedItem.SalesTaxInPercent; //Tax by Item
 
             this.item.OriginalPromotion = this.item.OriginalPromotion ? parseInt(this.item.OriginalPromotion) : 0;
             line.OriginalPromotion = this.item.OriginalPromotion;//Lấy theo order
