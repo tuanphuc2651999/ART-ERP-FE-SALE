@@ -24,6 +24,7 @@ export class SaleOrderPage extends PageBase {
     vehicleList = [];
     shipmentList = [];
     contact: any = {};
+    isShowExpectedDeliveryDate: boolean = false;
 
     segmentView = 's1';
     shipmentQuery: any = { IDStatus: 301, DeliveryDate: '', SortBy: 'IDVehicle' };
@@ -80,8 +81,14 @@ export class SaleOrderPage extends PageBase {
         }
 
 
-        this.statusProvider.read({ IDParent: 1 }).then(response => {
-            this.statusList = response['data'];
+        Promise.all([
+            this.pageProvider.commonService.connect('GET', 'SYS/Config/ConfigByBranch', { Code: 'IsShowExpectedDeliveryDate', IDBranch: this.env.selectedBranch }).toPromise(),
+            this.statusProvider.read({ IDParent: 1 })
+        ]).then((values: any) => {
+            if (values[0]['Value']) {
+                this.isShowExpectedDeliveryDate = JSON.parse(values[0]['Value']);
+            };
+            this.statusList = values[1]['data'];
             super.preLoadData(event);
 
         });
@@ -96,6 +103,11 @@ export class SaleOrderPage extends PageBase {
             i.OrderTimeText = i.OrderDate ? lib.dateFormat(i.OrderDate, 'hh:MM') : '';
             i.OrderDateText = i.OrderDate ? lib.dateFormat(i.OrderDate, 'dd/mm/yy') : '';
             i.Query = i.OrderDate ? lib.dateFormat(i.OrderDate, 'yyyy-mm-dd') : '';
+
+            i.ExpectedDeliveryTimeText = i.ExpectedDeliveryDate ? lib.dateFormat(i.ExpectedDeliveryDate, 'hh:MM') : '';
+            i.ExpectedDeliveryDateText = i.ExpectedDeliveryDate ? lib.dateFormat(i.ExpectedDeliveryDate, 'dd/mm/yy') : '';
+            i.QueryExpectedDeliveryDate = i.ExpectedDeliveryDate ? lib.dateFormat(i.ExpectedDeliveryDate, 'yyyy-mm-dd') : '';
+            
             i.OriginalTotalAfterTaxText = lib.currencyFormat(i.OriginalTotalAfterTax);
             i.TotalAfterTaxText = lib.currencyFormat(i.TotalAfterTax);
         });
@@ -730,13 +742,13 @@ export class SaleOrderPage extends PageBase {
     }
 
     toggleRow(i, event) {
-       
-        
+
+
         if (!i._HasSubOrder) {
             return;
         }
         event.stopPropagation();
-        
+
         if (i._ShowSubOrder) {
             i._ShowSubOrder = false;
             let subOrders = this.items.filter(d => d.IDParent == i.Id);
