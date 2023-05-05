@@ -2,8 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_VehicleProvider, SYS_StatusProvider, AC_ARInvoiceProvider, CRM_ContactProvider } from 'src/app/services/static/services.service';
-import { Location } from '@angular/common';
+import { SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_VehicleProvider, AC_ARInvoiceProvider } from 'src/app/services/static/services.service';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
 import { SaleOrderSplitModalPage } from '../sale-order-split-modal/sale-order-split-modal.page';
@@ -37,21 +36,15 @@ export class SaleOrderPage extends PageBase {
 
     constructor(
         public pageProvider: SALE_OrderProvider,
-        public branchProvider: BRA_BranchProvider,
-        public statusProvider: SYS_StatusProvider,
         public shipmentProvider: SHIP_ShipmentProvider,
         public vehicleProvider: SHIP_VehicleProvider,
         public arInvoiceProvider: AC_ARInvoiceProvider,
-        public contactProvider: CRM_ContactProvider,
-
         public EInvoiceServiceProvider: EInvoiceService,
-
         public modalController: ModalController,
         public alertCtrl: AlertController,
         public loadingController: LoadingController,
         public env: EnvService,
         public navCtrl: NavController,
-        public location: Location,
     ) {
         super();
         // this.pageConfig.isShowFeature = true;
@@ -84,12 +77,12 @@ export class SaleOrderPage extends PageBase {
 
         Promise.all([
             this.pageProvider.commonService.connect('GET', 'SYS/Config/ConfigByBranch', { Code: 'IsShowExpectedDeliveryDate', IDBranch: this.env.selectedBranch }).toPromise(),
-            this.statusProvider.read({ IDParent: 1 })
+            this.env.getStatus('SalesOrder')
         ]).then((values: any) => {
             if (values[0]['Value']) {
                 this.isShowExpectedDeliveryDate = JSON.parse(values[0]['Value']);
             };
-            this.statusList = values[1]['data'];
+            this.statusList = values[1];
             super.preLoadData(event);
 
         });
