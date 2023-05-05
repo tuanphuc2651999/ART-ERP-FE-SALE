@@ -3,7 +3,7 @@ import { NavController, ModalController, LoadingController, AlertController } fr
 import { PageBase } from 'src/app/page-base';
 import { ActivatedRoute } from '@angular/router';
 import { EnvService } from 'src/app/services/core/env.service';
-import { SALE_OrderProvider, BRA_BranchProvider, AC_ARInvoiceProvider, CRM_ContactProvider, SALE_OrderDetailProvider, WMS_ItemProvider, HRM_StaffProvider, SYS_StatusProvider } from 'src/app/services/static/services.service';
+import { SALE_OrderProvider, BRA_BranchProvider, AC_ARInvoiceProvider, CRM_ContactProvider, SALE_OrderDetailProvider, WMS_ItemProvider, HRM_StaffProvider } from 'src/app/services/static/services.service';
 import { FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
