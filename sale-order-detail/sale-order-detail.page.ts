@@ -117,7 +117,7 @@ export class SaleOrderDetailPage extends PageBase {
             InvoiceNumber: [''],
             InvoicDate: [''],
             Sort: [''],
-            IsDisabled: [''],
+            IsDisabled: new FormControl({ value: '', disabled: true }),
             IsDeleted: [''],
             CreatedBy: [''],
             ModifiedBy: [''],
