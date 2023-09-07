@@ -31,9 +31,9 @@
 	</div>
 
 	<ion-list lines="none">
-		<ion-virtual-scroll [items]="items" approxItemHeight="290px">
-			<ion-item-sliding *virtualItem="let i; let itemBounds = bounds; let j = index;">
-				<ion-item class="ion-no-margin ion-no-padding">
+
+			<ion-item-sliding *ngFor="let i of items; let j = index;">
+				<ion-item   class="ion-no-margin ion-no-padding">
 
 					<ion-card class="booking ion-no-margin ion-margin-horizontal">
 
@@ -121,7 +121,6 @@
 					</ion-item-option>
 				</ion-item-options>
 			</ion-item-sliding>
-		</ion-virtual-scroll>
 	</ion-list>
 
 	<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="pageConfig.canAdd && !query.IsDisabled">

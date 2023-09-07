@@ -808,7 +808,6 @@ export class SaleOrderDetailPage extends PageBase {
     async addContact() {
         // const modal = await this.modalController.create({
         //     component: SaleOrderMobileAddContactModalPage,
-        //     swipeToClose: true,
         //     cssClass: 'my-custom-class',
         //     componentProps: {
         //         'firstName': 'Douglas',
@@ -859,7 +858,6 @@ export class SaleOrderDetailPage extends PageBase {
 
         // const modal = await this.modalController.create({
         //     component: SaleOrderARInvoiceModalPage,
-        //     swipeToClose: true,
         //     cssClass: 'modal90',
         //     componentProps: {
         //         'selectedOrder': this.selectedItems[0]

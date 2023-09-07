@@ -218,9 +218,7 @@ export class SaleOrderPage extends PageBase {
             return;
         }
         const modal = await this.modalController.create({
-            component: SaleOrderSplitModalPage,
-            swipeToClose: true,
-            cssClass: 'modal90',
+            component: SaleOrderSplitModalPage,            cssClass: 'modal90',
             componentProps: {
                 'selectedOrder': this.selectedItems[0]
             }
@@ -240,9 +238,7 @@ export class SaleOrderPage extends PageBase {
         }
 
         const modal = await this.modalController.create({
-            component: SaleOrderMergeModalPage,
-            swipeToClose: true,
-            cssClass: 'modal-merge-orders',
+            component: SaleOrderMergeModalPage,            cssClass: 'modal-merge-orders',
             componentProps: {
                 'selectedOrders': this.selectedItems
             }
@@ -697,9 +693,7 @@ export class SaleOrderPage extends PageBase {
         })
 
         const modal = await this.modalController.create({
-            component: SaleOrderMergeARInvoiceModalPage,
-            swipeToClose: true,
-            cssClass: 'modal90',
+            component: SaleOrderMergeARInvoiceModalPage,            cssClass: 'modal90',
             componentProps: {
                 'selectedOrders': this.selectedItems
             }
@@ -720,9 +714,7 @@ export class SaleOrderPage extends PageBase {
         }
 
         const modal = await this.modalController.create({
-            component: SaleOrderARInvoiceModalPage,
-            swipeToClose: true,
-            cssClass: 'modal90',
+            component: SaleOrderARInvoiceModalPage,            cssClass: 'modal90',
             componentProps: {
                 'selectedOrder': this.selectedItems[0]
             }

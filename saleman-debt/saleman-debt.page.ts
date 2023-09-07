@@ -64,9 +64,7 @@ export class SalemanDebtPage extends PageBase {
 
     async createReceipt() {
         const modal = await this.modalController.create({
-            component: SalemanDebtModalPage,
-            swipeToClose: true,
-            cssClass: 'modal-saleman-debt',
+            component: SalemanDebtModalPage,            cssClass: 'modal-saleman-debt',
             componentProps: {
                 'selectedOrders': this.selectedItems
             }
