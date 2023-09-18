@@ -7,13 +7,11 @@
     </ion-toolbar>
 </ion-header>
 <ion-content appScrollbarTheme>
-
-    <!-- <ion-virtual-scroll [items]="items" approxItemHeight="60px;" *ngIf="items.length">
-        <ion-item-divider *virtualHeader="let header">
+    <ng-container *ngFor="let i of items; let j = index;">
+        <ion-item-divider *ngIf="myHeaderFn(i, j, items); let header">
             {{ header }}
         </ion-item-divider>
-
-        <ion-item lines="none" *virtualItem="let i; let itemBounds = bounds;">
+        <ion-item lines="none">
             <ion-avatar slot="start">
                 <img src="http://placekitten.com/300/300" />
             </ion-avatar>
@@ -27,7 +25,5 @@
                 <p>CASTER 3 - thêm 50 khách.</p>
             </ion-label>
         </ion-item>
-    </ion-virtual-scroll> -->
-
-  
+    </ng-container>
 </ion-content>
