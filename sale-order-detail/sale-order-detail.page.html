@@ -176,7 +176,7 @@
 				<div *ngIf="segmentView == 's1'">
 
 					<div class="table-contain">
-						<section class="table" style="min-width: 1440px;">
+						<section class="table" style="min-width: 1550px;">
 							<header class="bold">
 								<div class="col-id cell">#</div>
 								<div class="col-name cell">{{'erp.app.pages.sale.sale-order.name' | translate}}</div>
@@ -196,6 +196,7 @@
 								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.price-discount-from-saleman-title' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.price-discount-from-saleman' | translate}} <br> {{'erp.app.pages.sale.sale-order.after-discount' | translate}}</div>
 								<div class="col-total cell" title="{{'erp.app.pages.sale.sale-order.total-after-tax-title' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.total-after-tax' | translate}} </div>
 								<div class="col-price cell">{{'erp.app.pages.sale.sale-order.vat' | translate}}</div>
+								<div *ngIf="pageConfig.SOIsShowOrderDetailRemark" class="col-remark cell">Remark</div>
 								<div class="col-del cell" *ngIf="pageConfig.canEdit"></div>
 							</header>
 
@@ -273,7 +274,9 @@
 								</div>
 
 								<div class="col-price cell"><input class="c-input" [disabled]="true" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="true" [(ngModel)]="i.TaxRate"></div>
-
+								<div class="col-remark cell" *ngIf="pageConfig.SOIsShowOrderDetailRemark">
+								<input [readonly]="!pageConfig.canEdit" [(ngModel)]="i.Remark" class="c-input" (change)="saveChange()">
+								</div>
 								<div class="col-del cell" *ngIf="pageConfig.canEdit" (click)="deleteOrderLine(i)">
 									<ion-icon color="danger" class="min-btn" name="trash-outline"></ion-icon>
 								</div>
@@ -329,6 +332,8 @@
 									<input class="c-input" [disabled]="true" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="true" [ngModel]="item.OriginalTotalAfterDiscountFromSalesman">
 								</div>
 								<div class="col-price cell"></div>
+								<div class="col-remark cell" *ngIf="pageConfig.SOIsShowOrderDetailRemark"></div>
+							
 								<div class="col-del cell" *ngIf="pageConfig.canEdit"></div>
 							</div>
 
