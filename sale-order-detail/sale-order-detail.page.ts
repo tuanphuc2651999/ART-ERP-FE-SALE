@@ -3,7 +3,7 @@ import { NavController, ModalController, LoadingController, AlertController } fr
 import { PageBase } from 'src/app/page-base';
 import { ActivatedRoute } from '@angular/router';
 import { EnvService } from 'src/app/services/core/env.service';
-import { SALE_OrderProvider, BRA_BranchProvider, AC_ARInvoiceProvider, CRM_ContactProvider, SALE_OrderDetailProvider, WMS_ItemProvider, HRM_StaffProvider } from 'src/app/services/static/services.service';
+import { SALE_OrderProvider, BRA_BranchProvider, AC_ARInvoiceProvider, CRM_ContactProvider, SALE_OrderDetailProvider, WMS_ItemProvider, HRM_StaffProvider, SYS_ConfigProvider } from 'src/app/services/static/services.service';
 import { FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
@@ -50,6 +50,7 @@ export class SaleOrderDetailPage extends PageBase {
         public cdr: ChangeDetectorRef,
         public loadingController: LoadingController,
         public commonService: CommonService,
+        public sysConfigProvider: SYS_ConfigProvider,
         private config: NgSelectConfig
     ) {
         super();
@@ -196,16 +197,26 @@ export class SaleOrderDetailPage extends PageBase {
     // }
 
     preLoadData(event) {
+        let sysConfigQuery = ['SOIsShowOrderDetailRemark'];
         Promise.all([
             this.env.getStatus('SalesOrder'),
             this.env.getType('OrderType'),
             this.env.getType('FMCGSalesOrder'),
-            this.env.getType('PaymentMethod')
+            this.env.getType('PaymentMethod'),
+            this.sysConfigProvider.read({ Code_in: sysConfigQuery }),
+            
         ]).then((results:any)=>{
             this.statusList = results[0];
             this.typeList = results[1];
             this.subTypeList = results[2];
             this.paymentMethodList = results[3];
+            // this.pageConfig.systemConfig = {};
+            results[4]['data'].forEach(e => {
+                if ((e.Value == null || e.Value == 'null') && e._InheritedConfig) {
+                    e.Value = e._InheritedConfig.Value;
+                }
+                this.pageConfig[e.Code] = JSON.parse(e.Value);
+            });
         })
         
         super.preLoadData(event);
