@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
+import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
 import { SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_VehicleProvider, AC_ARInvoiceProvider } from 'src/app/services/static/services.service';
@@ -40,6 +40,7 @@ export class SaleOrderPage extends PageBase {
         public arInvoiceProvider: AC_ARInvoiceProvider,
         public EInvoiceServiceProvider: EInvoiceService,
         public modalController: ModalController,
+        public popoverCtrl: PopoverController,
         public alertCtrl: AlertController,
         public loadingController: LoadingController,
         public env: EnvService,
