@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, CRM_ContactProvider, SALE_OrderDetailProvider, SALE_OrderProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, CRM_ContactProvider, SALE_OrderDetailProvider, SALE_OrderProvider, SYS_ConfigProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import QRCode from 'qrcode'
@@ -23,6 +23,7 @@ export class SaleOrderNotePage extends PageBase {
         public pageProvider: SALE_OrderProvider,
         public saleOrderDetailProvider: SALE_OrderDetailProvider,
         public contactProvider: CRM_ContactProvider,
+        public sysConfigProvider: SYS_ConfigProvider,
         public branchProvider: BRA_BranchProvider,
         public modalController: ModalController,
         public alertCtrl: AlertController,
@@ -45,10 +46,18 @@ export class SaleOrderNotePage extends PageBase {
     isShowPackingUoM = true;
 
     preLoadData(event) {
+        let sysConfigQuery = ['SOIsRemoveItemsWithZeroPriceOnOrderNote'];
         Promise.all([
             this.env.getStatus('SalesOrder'),
+            this.sysConfigProvider.read({ Code_in: sysConfigQuery }),
         ]).then((values: any) => {
             this.statusList = values[0];
+            values[1]['data'].forEach(e => {
+                if ((e.Value == null || e.Value == 'null') && e._InheritedConfig) {
+                    e.Value = e._InheritedConfig.Value;
+                }
+                this.pageConfig[e.Code] = JSON.parse(e.Value);
+            });
             super.preLoadData(event);
         });
     }
@@ -93,6 +102,9 @@ export class SaleOrderNotePage extends PageBase {
 
             this.saleOrderDetailProvider.read({ IDOrder: JSON.stringify(queryLines) }).then(rows => {
                 let allLines = rows['data'];
+                if(this.pageConfig['SOIsRemoveItemsWithZeroPriceOnOrderNote']){
+                    allLines = allLines.filter(line=>line.UoMPrice >0);
+                }
                 let helper = {};
 
                 allLines = allLines.reduce(function (r, o) {
@@ -111,11 +123,13 @@ export class SaleOrderNotePage extends PageBase {
 
                 this.pageProvider.getAnItem(i.Id).then((resp:any) => {
                     SOList.push(resp)
-                    
+
                     
                     resp.Received = SOList?.map(x => x.Received).reduce((a, b) => (+a) + (+b), 0);
                     console.log(resp);
-                    
+                    if(resp && resp.OrderLines){
+                        resp.OrderLines = allLines;
+                    }
                     this.sheets = [resp];
     
                     this.branchProvider.getAnItem(resp['IDBranch']).then((branch: any) => {
