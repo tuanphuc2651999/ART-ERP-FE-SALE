@@ -275,7 +275,7 @@
 									<ion-icon name="open-outline"></ion-icon>
 								</a>
 							</span>
-							<small *ngIf="!i.IDParent" class="address">
+							<small *ngIf="!i.IDParent && i._Customer?.Address" class="address">
 								<ion-text color="dark"> <span>{{i._Customer.Address.AddressLine1}}</span> <span *ngIf="i._Customer.Address.AddressLine2"> {{i._Customer.Address.AddressLine2}}</span> </ion-text>
 							</small>
 						</div>
