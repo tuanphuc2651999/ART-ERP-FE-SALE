@@ -203,7 +203,7 @@ export class SaleOrderDetailPage extends PageBase {
             this.env.getType('OrderType'),
             this.env.getType('FMCGSalesOrder'),
             this.env.getType('PaymentMethod'),
-            this.sysConfigProvider.read({ Code_in: sysConfigQuery }),
+            this.sysConfigProvider.read({ Code_in: sysConfigQuery, IDBranch: this.env.selectedBranch }),
             
         ]).then((results:any)=>{
             this.statusList = results[0];

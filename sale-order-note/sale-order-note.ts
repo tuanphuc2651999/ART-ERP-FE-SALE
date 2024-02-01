@@ -49,7 +49,7 @@ export class SaleOrderNotePage extends PageBase {
         let sysConfigQuery = ['SOIsRemoveItemsWithZeroPriceOnOrderNote'];
         Promise.all([
             this.env.getStatus('SalesOrder'),
-            this.sysConfigProvider.read({ Code_in: sysConfigQuery }),
+            this.sysConfigProvider.read({ Code_in: sysConfigQuery, IDBranch: this.env.selectedBranch }),
         ]).then((values: any) => {
             this.statusList = values[0];
             values[1]['data'].forEach(e => {

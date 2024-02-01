@@ -30,7 +30,7 @@
 				</small>
 			</div>
 
-			<div *ngIf="isShowExpectedDeliveryDate" class="col-date cell" (click)="sortToggle('ExpectedDeliveryDate')">
+			<div *ngIf="pageConfig.isShowExpectedDeliveryDate" class="col-date cell" (click)="sortToggle('ExpectedDeliveryDate')">
 				{{'erp.app.pages.sale.sale-order.expected-delivery-date' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.ExpectedDeliveryDate" [name]="sort.ExpectedDeliveryDate == 'ExpectedDeliveryDate'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.ExpectedDeliveryDate" name="search" color="primary"></ion-icon>
@@ -90,7 +90,7 @@
 					<input placeholder="{{'erp.app.pages.sale.sale-order.order-date' | translate}}" (change)="refresh()" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.OrderDate" class="c-input" [ngClass]="{active: query.OrderDate}" type="date">
 					<ion-icon class="min-btn" (click)="query.OrderDate=''; refresh()" *ngIf="query.OrderDate" name="close-circle-outline"></ion-icon>
 				</div>
-				<div *ngIf="isShowExpectedDeliveryDate" class="col-date cell">
+				<div *ngIf="pageConfig.isShowExpectedDeliveryDate" class="col-date cell">
 					<input placeholder="{{'erp.app.pages.sale.sale-order.order-date' | translate}}" (change)="refresh()" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.ExpectedDeliveryDate" class="c-input" [ngClass]="{active: query.ExpectedDeliveryDate}" type="date">
 					<ion-icon class="min-btn" (click)="query.ExpectedDeliveryDate=''; refresh()" *ngIf="query.ExpectedDeliveryDate" name="close-circle-outline"></ion-icon>
 				</div>
@@ -261,7 +261,7 @@
 								<ion-text color="primary">BP</ion-text>
 							</small>
 						</div>
-						<div *ngIf="isShowExpectedDeliveryDate" class="col-date cell" (click)="query.ExpectedDeliveryDate=i.QueryExpectedDeliveryDate; pageConfig.isShowSearch=true; refresh()">
+						<div *ngIf="pageConfig.isShowExpectedDeliveryDate" class="col-date cell" (click)="query.ExpectedDeliveryDate=i.QueryExpectedDeliveryDate; pageConfig.isShowSearch=true; refresh()">
 							<span *ngIf="i.ExpectedDeliveryDateText">{{i.ExpectedDeliveryDateText}}</span>
 							<small *ngIf="i.ExpectedDeliveryTimeText && i.ExpectedDeliveryTimeText != '00:00' ">{{i.ExpectedDeliveryTimeText}}</small>
 						</div>
