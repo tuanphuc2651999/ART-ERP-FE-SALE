@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_VehicleProvider, AC_ARInvoiceProvider } from 'src/app/services/static/services.service';
+import { SALE_OrderProvider, SHIP_ShipmentProvider, SHIP_VehicleProvider, AC_ARInvoiceProvider, SYS_ConfigProvider } from 'src/app/services/static/services.service';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
 import { SaleOrderSplitModalPage } from '../sale-order-split-modal/sale-order-split-modal.page';
@@ -23,7 +23,6 @@ export class SaleOrderPage extends PageBase {
     vehicleList = [];
     shipmentList = [];
     contact: any = {};
-    isShowExpectedDeliveryDate: boolean = false;
 
     segmentView = 's1';
     shipmentQuery: any = { IDStatus: 301, DeliveryDate: '', SortBy: 'IDVehicle' };
@@ -38,6 +37,7 @@ export class SaleOrderPage extends PageBase {
         public shipmentProvider: SHIP_ShipmentProvider,
         public vehicleProvider: SHIP_VehicleProvider,
         public arInvoiceProvider: AC_ARInvoiceProvider,
+        public sysConfigProvider: SYS_ConfigProvider,
         public EInvoiceServiceProvider: EInvoiceService,
         public modalController: ModalController,
         public popoverCtrl: PopoverController,
@@ -64,6 +64,7 @@ export class SaleOrderPage extends PageBase {
     preLoadData(event) {
         this.query.IDOwner = this.pageConfig.canViewAllData ? 'all' : this.env.user.StaffID;
         this.query.IDParent = null;
+        let sysConfigQuery = ['SOUsedApprovalModule','IsShowExpectedDeliveryDate'];
         //this.query.OrderDate = this.pageConfig.canViewAllData? 'all' : new Date();
         //this.query.IDStatus = '[1,2,3]';
         if (!this.sort.Id) {
@@ -76,13 +77,22 @@ export class SaleOrderPage extends PageBase {
 
 
         Promise.all([
-            this.pageProvider.commonService.connect('GET', 'SYS/Config/ConfigByBranch', { Code: 'IsShowExpectedDeliveryDate', IDBranch: this.env.selectedBranch }).toPromise(),
-            this.env.getStatus('SalesOrder')
+            this.sysConfigProvider.read({ Code_in: sysConfigQuery, IDBranch: this.env.selectedBranch }),
+            this.env.getStatus('SalesOrder'),
         ]).then((values: any) => {
-            if (values[0]['Value']) {
-                this.isShowExpectedDeliveryDate = JSON.parse(values[0]['Value']);
-            };
+            if(values[0]['data']){
+                values[0]['data'].forEach(e => {
+                    if ((e.Value == null || e.Value == 'null') && e._InheritedConfig) {
+                        e.Value = e._InheritedConfig.Value;
+                    }
+                    this.pageConfig[e.Code] = JSON.parse(e.Value);
+                });
+            }
+            if(this.pageConfig.SOUsedApprovalModule){
+                this.pageConfig.canApprove = false;
+            }
             this.statusList = values[1];
+         
             super.preLoadData(event);
 
         });
@@ -252,7 +262,7 @@ export class SaleOrderPage extends PageBase {
     }
 
     submitOrdersForApproval() {
-        if (!this.pageConfig.canApprove) {
+        if (!this.pageConfig.canSubmitOrdersForApproval) {
             return;
         }
 
