@@ -166,7 +166,7 @@ export class SaleOrderSplitModalPage extends PageBase {
 
         return new Promise((resolve, reject) => {
             if (!this.item.Ids.length || !this.item.IDContact) {
-                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.check-merge-invoice-select-customer','warning');
+                this.env.showTranslateMessage('Please check the invoice to combine and select customer','warning');
             }
             else if (this.submitAttempt == false) {
                 this.submitAttempt = true;
@@ -180,13 +180,13 @@ export class SaleOrderSplitModalPage extends PageBase {
                         if (publishEventCode) {
                             this.env.publishEvent({ Code: publishEventCode });
                         }
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','warning');
+                        this.env.showTranslateMessage('Saving completed!','warning');
                         resolve(savedItem.Id);
                         this.submitAttempt = false;
                         this.closeModal();
 
                     }).catch(err => {
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save','danger');
+                        this.env.showTranslateMessage('Cannot save, please try again','danger');
                         this.cdr.detectChanges();
                         this.submitAttempt = false;
                         reject(err);
@@ -396,7 +396,7 @@ export class SaleOrderSplitModalPage extends PageBase {
 
         return new Promise((resolve, reject) => {
             if (!this.isCanSplit) {
-                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.check-customer-atleast-one','warning');
+                this.env.showTranslateMessage('Please check customer name and order must have at least 01 item.','warning');
             }
             else if (this.submitAttempt == false) {
                 this.submitAttempt = true;
@@ -410,13 +410,13 @@ export class SaleOrderSplitModalPage extends PageBase {
                         if (publishEventCode) {
                             this.env.publishEvent({ Code: publishEventCode });
                         }
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                        this.env.showTranslateMessage('Saving completed!','success');
                         resolve(true);
                         this.submitAttempt = false;
                         this.closeModal();
 
                     }).catch(err => {
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save','danger');
+                        this.env.showTranslateMessage('Cannot save, please try again','danger');
                         this.cdr?.detectChanges();
                         this.submitAttempt = false;
                         reject(err);

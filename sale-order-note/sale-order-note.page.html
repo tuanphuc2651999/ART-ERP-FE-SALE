@@ -3,19 +3,19 @@
 		<ion-buttons slot="start">
 			<ion-back-button [text]="'Trở lại'"></ion-back-button>
 		</ion-buttons>
-		<ion-title>{{'erp.app.pages.sale.sale-order-note.page-title' | translate}}</ion-title>
+		<ion-title>{{'Print sale order' | translate}}</ion-title>
 		<ion-buttons slot="end">
-			<!-- <ion-button (click)="changePrintMode()" title="{{'erp.app.pages.sale.sale-order-note.print-mode' | translate}}">
+			<!-- <ion-button (click)="changePrintMode()" title="{{'print-mode' | translate}}">
 				<ion-icon slot="icon-only" [name]="printMode == 'A4' ? 'cut-outline':'file-tray-full-outline'"></ion-icon>
 			</ion-button>
 			<span class="split ion-hide-sm-down">|</span> -->
-			<ion-button (click)="print()" title="{{'erp.app.pages.sale.sale-order-note.print' | translate}}">
+			<ion-button (click)="print()" title="{{'Form printing' | translate}}">
 				<ion-icon slot="icon-only" name="print"></ion-icon>
 			</ion-button>
-			<ion-button (click)="refresh()" title="{{'erp.app.pages.sale.sale-order-note.refresh' | translate}}">
+			<ion-button (click)="refresh()" title="{{'Refresh' | translate}}">
 				<ion-icon slot="icon-only" name="reload-outline"></ion-icon>
 			</ion-button>
-			<ion-button title="{{'erp.app.pages.sale.sale-order-note.show-feature' | translate}}" (click)="pageConfig.isShowFeature = !pageConfig.isShowFeature;">
+			<ion-button title="{{'Expanded function' | translate}}" (click)="pageConfig.isShowFeature = !pageConfig.isShowFeature;">
 				<ion-icon slot="icon-only" [name]="pageConfig.isShowFeature? 'close-outline':'list-circle-outline'">
 				</ion-icon>
 			</ion-button>
@@ -27,7 +27,7 @@
 	<ion-fab *ngIf="pageConfig.isShowFeature" [ngClass]="{withSearch: pageConfig.isShowSearch}" class="feature no-print " vertical="top" horizontal="start" slot="fixed">
 		<ion-list>
 			<ion-list-header lines="full">
-				<ion-label color="dark">{{'erp.app.pages.sale.sale-order-note.sale-order' | translate}}</ion-label>
+				<ion-label color="dark">{{'Order' | translate}}</ion-label>
 
 				<ion-button size="small" (click)="toggleDateFilter()">
 					<ion-icon slot="icon-only" [name]="query.IDStatus == '[104, 105, 109, 113, 114]' ? 'calendar-outline' : 'calendar'"></ion-icon>
@@ -39,7 +39,7 @@
 		<ion-list>
 			<ion-item lines="full" *ngIf="query.IDStatus!='[301]'">
 				<div class="c-control">
-					<label class="c-label" for="OrderDate">{{'erp.app.pages.sale.sale-order-note.orde-date' | translate}}</label>
+					<label class="c-label" for="OrderDate">{{'Order created date' | translate}}</label>
 					<input class="c-input" (change)="refresh()" id="OrderDate" type="date" [(ngModel)]="query.OrderDate">
 				</div>
 			</ion-item>
@@ -99,7 +99,7 @@
 												<td rowspan="7" class="logo">
 													<img [src]="o.BranchLogoURL" (error)="$event.src='assets/RPT-Logo-ART.png'">
 												</td>
-												<td colspan="2" class="bol title">{{'erp.app.pages.sale.sale-order-note.detail-table' | translate}}</td>
+												<td colspan="2" class="bol title">{{'Payment detail listings' | translate}}</td>
 
 												<td class="bol num" colspan="2">{{o.Code? o.Code : '#'+o.Id}}</td>
 												<td rowspan="7" class="topQR">
@@ -111,28 +111,28 @@
 											</tr>
 
 											<tr>
-												<td class="head-c1">{{'erp.app.pages.sale.sale-order-note.branch-name' | translate}}:</td>
+												<td class="head-c1">{{'Company' | translate}}:</td>
 												<td class="bol">{{o.BranchName}}</td>
 												<td class="bol num" colspan="2">{{o.OrderDateText}}</td>
 
 											</tr>
 											<tr>
-												<td>{{'erp.app.pages.sale.sale-order-note.branch-address' | translate}}:</td>
+												<td>{{'Address' | translate}}:</td>
 												<td colspan="2"><span class="bol">{{o.BranchAddress}} </span></td>
 											</tr>
 
 											<tr>
-												<td>{{'erp.app.pages.sale.sale-order-note.customer-name' | translate}}:</td>
+												<td>{{'Customer name' | translate}}:</td>
 												<td class="bol" colspan="2">{{o._Customer.Name}} </td>
 											</tr>
 
 											<tr>
-												<td>{{'erp.app.pages.sale.sale-order-note.workphone' | translate}}:</td>
+												<td>{{'Phone number' | translate}}:</td>
 												<td class="bol" colspan="2">{{o.WorkPhone}} </td>
 											</tr>
 
 											<tr>
-												<td>{{'erp.app.pages.sale.sale-order-note.order-name' | translate}}:</td>
+												<td>{{'Content' | translate}}:</td>
 												<td class="bol" colspan="2">{{o.Name}} </td>
 											</tr>
 
@@ -148,19 +148,19 @@
 										<table cellpadding="0" cellspacing="0">
 											<tbody>
 												<tr class="head">
-													<td class="cen">{{'erp.app.pages.sale.sale-order-note.stt' | translate}}</td>
+													<td class="cen">{{'No.' | translate}}</td>
 													<td>
-													<div class="ten-sp ck">{{'erp.app.pages.sale.sale-order-note.service-name' | translate}}</div>
+													<div class="ten-sp ck">{{'Service name' | translate}}</div>
 													</td>
-													<td class="cen">{{'erp.app.pages.sale.sale-order-note.qty' | translate}}</td>
-													<td class="cen">{{'erp.app.pages.sale.sale-order-note.uom' | translate}}</td>
-													<td class="num">{{'erp.app.pages.sale.sale-order-note.price' | translate}}</td>
-													<td class="num">{{'erp.app.pages.sale.sale-order-note.total' | translate}}</td>
-													<!-- <td class="cen">{{'erp.app.pages.sale.sale-order-note.service-charge' | translate}}</td> -->
-													<td class="num">{{'erp.app.pages.sale.sale-order-note.total-service' | translate}}</td>
-													<td class="cen">{{'erp.app.pages.sale.sale-order-note.vat' | translate}}</td>
-													<td class="num">{{'erp.app.pages.sale.sale-order-note.total-vat' | translate}}</td>
-													<td class="num">{{'erp.app.pages.sale.sale-order-note.total-after-tax' | translate}}</td>
+													<td class="cen">{{'S.L' | translate}}</td>
+													<td class="cen">{{'Unit' | translate}}</td>
+													<td class="num">{{'Unit price' | translate}}</td>
+													<td class="num">{{'Amount' | translate}}</td>
+													<!-- <td class="cen">{{'Service charge (%)' | translate}}</td> -->
+													<td class="num">{{'Service charge (Amount)' | translate}}</td>
+													<td class="cen">{{'VAT(%)' | translate}}</td>
+													<td class="num">{{'VAT' | translate}}</td>
+													<td class="num">{{'Total amount' | translate}}</td>
 												</tr>
 
 												<ng-container>
@@ -183,7 +183,7 @@
 											
 												<tr >
 													<td colspan="5" class="num" style="text-align: left !important;">
-														{{'erp.app.pages.sale.sale-order-note.sum-up' | translate}}
+														{{'Total' | translate}}
 													</td>
 													<td class="num"><b>{{o.TotalBeforeDiscount | number: '1.0-0' }}</b></td>
 													<!-- <td class="num"></td> -->
@@ -222,21 +222,21 @@
 										<tbody>
 											<tr>
 												<td colspan="2" style="text-align: left !important; margin-bottom: 16px;">
-													<b><i>{{'erp.app.pages.sale.sale-order-note.in-text' | translate}}: {{o.DocTienBangChu}}</i></b>
+													<b><i>{{'In words' | translate}}: {{o.DocTienBangChu}}</i></b>
 												</td>
 											</tr>
 											<tr>
 												<td colspan="2"><br></td>
 											</tr>
 											<tr>
-												<td style="width: 50%;">{{'erp.app.pages.sale.sale-order-note.a-side' | translate}}
+												<td style="width: 50%;">{{'Party A (Service provider)' | translate}}
 													<div class="line2">
-														<i>{{'erp.app.pages.sale.sale-order-note.sign-full-name' | translate}}</i>
+														<i>{{'(Sign and write full name)' | translate}}</i>
 													</div></td>
 												<td>
-													{{'erp.app.pages.sale.sale-order-note.b-side' | translate}}
+													{{'Party B (Service user)' | translate}}
 													<div class="line2">
-														<i>{{'erp.app.pages.sale.sale-order-note.sign-full-name' | translate}}</i>
+														<i>{{'(Sign and write full name)' | translate}}</i>
 													</div>
 												</td>
 											</tr>

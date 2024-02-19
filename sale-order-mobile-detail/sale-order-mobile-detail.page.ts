@@ -106,6 +106,8 @@ export class SaleOrderMobileDetailPage extends PageBase {
             Debt: [''],
             IsDebt: [''],
             IsPaymentReceived: [''],
+
+            TaxCode: [''],
             InvoiceNumber: [''],
             InvoicDate: [''],
             Sort: [''],
@@ -265,6 +267,9 @@ export class SaleOrderMobileDetailPage extends PageBase {
             this.item.OrderDateText = lib.dateFormat(this.item.OrderDate, 'hh:MM dd/mm/yyyy');
             //this.orderLineFormGroups.clear();
 
+            this.LoadTaxCodeDataSource(this.item._Customer);
+
+
             if (this.item.Name || this.item.Remark) {
                 this.showRemark = true;
             }
@@ -318,19 +323,15 @@ export class SaleOrderMobileDetailPage extends PageBase {
             if (!this.pageConfig.canEdit) {
                 this.pageConfig.canEdit = this.pageConfig.canAdd;
             }
+            this.item.Type = 'FMCGSalesOrder';
+            this.item.SubType = 'PreSales';
             this.item.OrderLines = [];
             super.loadedData(event, true);
         }
 
-        if (this.item.IDAddress) {
-            this.contactProvider.search({ Take: 20, Skip: 0, Term: this.item.IDContact }).subscribe((data: any) => {
-                let contact = data.find(d => d.IDAddress == this.item.IDAddress);
-                this.contactSelected = contact;
-                data.filter(d => d.Id == this.item.IDContact).forEach(i => {
-                    if (i && this.contactListSelected.findIndex(d => d.IDAddress == i.IDAddress) == -1)
-                        this.contactListSelected.push(i);
-                });
-
+        if (this.item._Customer) {
+            this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: true, Term: 'BP:' + this.item.IDContact }).subscribe((data: any) => {
+                this.contactListSelected.push(this.item._Customer);
                 this.contactSearch();
                 this.cdr.detectChanges();
             });
@@ -353,9 +354,21 @@ export class SaleOrderMobileDetailPage extends PageBase {
 
     }
 
+    TaxCodeDataSource = [];
+    LoadTaxCodeDataSource(i) {
+        this.TaxCodeDataSource = [];
+        this.contactSelected = i;
+        if(i?.TaxAddresses){
+            this.TaxCodeDataSource = i.TaxAddresses;
+        }
+        this.TaxCodeDataSource.unshift({ CompanyName: '----------', disabled: true });
+        this.TaxCodeDataSource.unshift({ TaxCode: '-1', CompanyName: 'Xuất khách vãng lai' });
+        this.TaxCodeDataSource.unshift({ TaxCode: null, CompanyName: 'Xuất theo MST mặc định' });
+    }
+
     changedIDAddress(i) {
         if (i) {
-            this.contactSelected = i;
+            this.LoadTaxCodeDataSource(i);
             this.item.IDContact = i.Id;
             this.item.IDAddress = i.Id;
             this.formGroup.controls.IDContact.setValue(i.Id);
@@ -395,7 +408,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
             this.contactListInput$.pipe(
                 distinctUntilChanged(),
                 tap(() => this.contactListLoading = true),
-                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, Term: term ? term : 'BP:'+  this.item.IDContact }).pipe(
+                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: term ? false : true, Term: term ? term : 'BP:' + this.item.IDContact }).pipe(
                     catchError(() => of([])), // empty list on error
                     tap(() => this.contactListLoading = false)
                 ))
@@ -437,7 +450,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
             line._itemData = selectedItem;
             line.TaxRate = selectedItem.SalesTaxInPercent; //Tax by Item
 
-            this.item.OriginalPromotion = this.item.OriginalPromotion ? parseInt(this.item.OriginalPromotion) : 0;
+            this.item.OriginalPromotion = this.item.OriginalPromotion ? parseFloat(this.item.OriginalPromotion) : 0;
             line.OriginalPromotion = this.item.OriginalPromotion;//Lấy theo order
             this.changedItemUoM(line);
 
@@ -537,8 +550,8 @@ export class SaleOrderMobileDetailPage extends PageBase {
             line.IDUoM = idUoM;
             line._UoM = u;
 
-            let salePrice = u.PriceList.find(d => d.IDPriceList == 1);
-            let buyPrice = u.PriceList.find(d => d.IDPriceList == 2);
+            let salePrice = u.PriceList.find(d => d.IDPriceList == 1 || d.Type == 'PriceListForCustomerAndVendor');
+            let buyPrice = u.PriceList.find(d => d.IDPriceList == 2 || d.Type == 'PriceListForCustomerAndVendor');
 
             line._UoMPrice = salePrice ? salePrice.Price : 0;
             line._BuyPrice = buyPrice ? buyPrice.Price : 0;
@@ -612,13 +625,13 @@ export class SaleOrderMobileDetailPage extends PageBase {
 
     calcOrderLine(line) {
         return new Promise((resolve, reject) => {
-            line.UoMPrice = line.IsPromotionItem ? 0 : parseInt(line.UoMPrice) || 0;
-            line.BuyPrice = parseInt(line.BuyPrice) || 0;
+            line.UoMPrice = line.IsPromotionItem ? 0 : parseFloat(line.UoMPrice) || 0;
+            line.BuyPrice = parseFloat(line.BuyPrice) || 0;
 
-            line.Quantity = parseInt(line.Quantity) || 0;
-            line.OriginalDiscount1 = line.IsPromotionItem ? 0 : parseInt(line.OriginalDiscount1) || 0;
-            line.OriginalDiscount2 = line.IsPromotionItem ? 0 : parseInt(line.OriginalDiscount2) || 0;
-            line.OriginalDiscountFromSalesman = parseInt(line.OriginalDiscountFromSalesman) || 0;
+            line.Quantity = parseFloat(line.Quantity) || 0;
+            line.OriginalDiscount1 = line.IsPromotionItem ? 0 : parseFloat(line.OriginalDiscount1) || 0;
+            line.OriginalDiscount2 = line.IsPromotionItem ? 0 : parseFloat(line.OriginalDiscount2) || 0;
+            line.OriginalDiscountFromSalesman = parseFloat(line.OriginalDiscountFromSalesman) || 0;
 
 
             // if (!line.IsPromotionItem && line.OriginalDiscount1 > 0 && line.OriginalDiscount1 < 1000) {
@@ -686,7 +699,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
         this.item.ProductDimensions = 0;
 
         this.item.OriginalTotalBeforeDiscount = 0;
-        this.item.OriginalPromotion = this.item.OriginalPromotion ? parseInt(this.item.OriginalPromotion) : 0;
+        this.item.OriginalPromotion = this.item.OriginalPromotion ? parseFloat(this.item.OriginalPromotion) : 0;
         this.item.OriginalDiscount1 = 0;
         this.item.OriginalDiscount2 = 0;
         this.item.OriginalDiscountByItem = 0;
@@ -760,7 +773,7 @@ export class SaleOrderMobileDetailPage extends PageBase {
         }
 
         if (this.item.OriginalDiscountFromSalesman < 0) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save-negative-order','warning',null,0,true);
+            this.env.showTranslateMessage('Order not saved as discount from sales man less than 0', 'danger', null, 0, true);
         }
         else {
             this.formGroup.patchValue(this.item);

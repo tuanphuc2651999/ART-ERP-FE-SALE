@@ -1,41 +1,41 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.sale.saleman-debt.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)" (createReceipt)="createReceipt()"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'Debt of Saleman' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)" (createReceipt)="createReceipt()"></app-list-toolbar>
 
 	<section class="table" [ngClass]="{withFeature_: pageConfig.isShowFeature}">
 		<header class="bold">
 			<div class="col-checkbox cell"></div>
 			<div class="col-id cell" (click)="sortToggle('Id')">
-				#{{'erp.app.pages.sale.saleman-debt.id' | translate}}
+				#{{'Order' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.Id" [name]="sort.Id == 'Id'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Id" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-OrderDate cell" (click)="sortToggle('OrderDate')">
-				{{'erp.app.pages.sale.saleman-debt.order-date' | translate}}
+				{{'Order created date' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.OrderDate" [name]="sort.OrderDate == 'OrderDate'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.OrderDate" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-name cell" (click)="sortToggle('CustomerName')">
-				{{'erp.app.pages.sale.saleman-debt.customer-name' | translate}}
+				{{'Customer' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.CustomerName" [name]="sort.CustomerName == 'CustomerName'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.CustomerName" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-SellerName cell" (click)="sortToggle('IDSeller')">
-				{{'erp.app.pages.sale.saleman-debt.id-seller' | translate}}
+				{{'Salesman' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.IDSeller" [name]="sort.IDSeller == 'IDSeller'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.SellerName" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-DiscountFromSalesman cell money hide-screen" (click)="sortToggle('DiscountFromSalesman')">
-				{{'erp.app.pages.sale.saleman-debt.discount-from-salesman' | translate}}
+				{{'Discount from saleman' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.DiscountFromSalesman" [name]="sort.DiscountFromSalesman == 'DiscountFromSalesman'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.DiscountFromSalesman" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-ReceivedDiscountFromSalesman cell money hide-screen" (click)="sortToggle('ReceivedDiscountFromSalesman')">
-				{{'erp.app.pages.sale.saleman-debt.received-discount-from-salesman' | translate}}
+				{{'Amount paid' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.ReceivedDiscountFromSalesman" [name]="sort.ReceivedDiscountFromSalesman == 'ReceivedDiscountFromSalesman'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.ReceivedDiscountFromSalesman" name="search" color="primary"></ion-icon>
 			</div>
 			<div class="col-code cell hide-screen" (click)="sortToggle('Code')">
-				{{'erp.app.pages.sale.saleman-debt.discount-from-vendor' | translate}}
+				{{'Vendor code' | translate}}
 				<ion-icon class="min-btn" *ngIf="sort.Code" [name]="sort.Code == 'Code'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Code" name="search" color="primary"></ion-icon>
 			</div>
@@ -93,11 +93,11 @@
 							
 						</div>
 						<div class="col-name cell">
-							<span title="{{'erp.app.pages.sale.saleman-debt.view-order-detail' | translate}}" (click)="nav('sale-order/'+i.Id,'forward')">{{i.CustomerName}}</span>
-							<small title="{{'erp.app.pages.sale.saleman-debt.find-with-contact-id' | translate}}" (click)="query.CustomerName='C:'+i.IDContact; pageConfig.isShowSearch=true; refresh()">
+							<span title="{{'View order's details' | translate}}" (click)="nav('sale-order/'+i.Id,'forward')">{{i.CustomerName}}</span>
+							<small title="{{'Search for this customer' | translate}}" (click)="query.CustomerName='C:'+i.IDContact; pageConfig.isShowSearch=true; refresh()">
 								{{i.IDContact}}
 							</small>
-							<a [href]="'#/'+'business-partner/'+i.IDContact" (click)="nav('business-partner/'+i.IDContact,'forward')" title="{{'erp.app.pages.sale.saleman-debt.view-contact-detail' | translate}}">
+							<a [href]="'#/'+'business-partner/'+i.IDContact" (click)="nav('business-partner/'+i.IDContact,'forward')" title="{{'View customers' information' | translate}}">
 								<ion-icon name="open-outline"></ion-icon>
 							</a>
 						</div>

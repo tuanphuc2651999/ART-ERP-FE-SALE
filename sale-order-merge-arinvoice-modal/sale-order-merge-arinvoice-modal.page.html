@@ -2,10 +2,10 @@
     <ion-toolbar>
         <ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
             <ion-segment-button value="s1">
-                <ion-label>{{'erp.app.pages.sale.sale-order.merge-arinvoice.contact-select' | translate}}</ion-label>
+                <ion-label>{{'Select customer' | translate}}</ion-label>
             </ion-segment-button>
             <ion-segment-button value="s2">
-                <ion-label>{{'erp.app.pages.sale.sale-order.merge-arinvoice.detail' | translate}}</ion-label>
+                <ion-label>{{'Details' | translate}}</ion-label>
             </ion-segment-button>
 
             <!-- <ion-segment-button [value]="idx" *ngFor="let o of item.SplitedInvoices; let idx = index;">
@@ -15,16 +15,16 @@
 
         <ion-buttons slot="primary">
             <ion-button (click)="addSplitedInvoice()">
-                <ion-icon class="min-btn" title="{{'erp.app.pages.sale.sale-order.merge-arinvoice.add' | translate}}" name="add-circle-outline"></ion-icon>
+                <ion-icon class="min-btn" title="{{'Add' | translate}}" name="add-circle-outline"></ion-icon>
             </ion-button>
             <ion-button (click)="removeSplitedInvoice()">
-                <ion-icon class="min-btn" title="{{'erp.app.pages.sale.sale-order.merge-arinvoice.delete' | translate}}" name="remove-circle-outline"></ion-icon>
+                <ion-icon class="min-btn" title="{{'Delete' | translate}}" name="remove-circle-outline"></ion-icon>
             </ion-button>
-            <ion-button title="{{'erp.app.pages.sale.sale-order.merge-arinvoice.help' | translate}}" (click)="help()">
+            <ion-button title="{{'Help' | translate}}" (click)="help()">
                 <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
             </ion-button>
 
-            <ion-button title="{{'erp.app.pages.sale.sale-order.merge-arinvoice.close-modal' | translate}}" color="secondary" (click)="closeModal()">
+            <ion-button title="{{'Close' | translate}}" color="secondary" (click)="closeModal()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -41,10 +41,10 @@
                 <ion-col size="12">
                     <div class="c-control">
                         <label class="c-label" for="IDContact">
-                            {{'erp.app.pages.sale.sale-order.merge-arinvoice.idcontact' | translate}}
+                            {{'Customer' | translate}}
                         </label>
 
-                        <ng-select [(ngModel)]="item.IDContact" appendTo="#order-detail-page" class="c-input" (change)="changedIDContact($event)" #IDContact labelForId="IDContact" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.merge-arinvoice.placeholder-idcontact' | translate}}">
+                        <ng-select [(ngModel)]="item.IDContact" appendTo="#order-detail-page" class="c-input" (change)="changedIDContact($event)" #IDContact labelForId="IDContact" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'Search for name, code or phone number' | translate}}">
                             <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                                 <div *ngIf="i">
                                     <div>
@@ -78,7 +78,7 @@
                                                 appendTo="#order-detail-page" [(ngModel)]="i.IDItem"
                                                 [labelForId]="'IDItem'+idx" [items]="itemList$ | async"
                                                 [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name"
-                                                bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.merge-arinvoice.placeholder-iditem' | translate}}">
+                                                bindValue="Id" placeholder="{{'Search for name or product code' | translate}}">
                                                 <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                                                     <div *ngIf="i">
                                                         <div><span>{{i.Name}}</span></div>
@@ -91,7 +91,7 @@
 
                                         <table style="max-width: 100%; min-width: 100%;">
                                             <tr *ngIf="i._itemData">
-                                                <td class="label">{{'erp.app.pages.sale.sale-order.merge-arinvoice.id-uom' | translate}}</td>
+                                                <td class="label">{{'Unit' | translate}}</td>
                                                 <td class="UoM col-total c-control"
                                                     *ngFor="let o of i.splitDetail; let jdx = index;">
                                                     <span class="c-input c-dropdown">{{o.UoMName}}</span>
@@ -105,7 +105,7 @@
                                                 </td>
                                             </tr>
                                             <tr *ngIf="i._itemData && i.IDUoM">
-                                                <td class="label">{{'erp.app.pages.sale.sale-order.merge-arinvoice.quantity' | translate}}</td>
+                                                <td class="label">{{'Quantity' | translate}}</td>
                                                 <td *ngFor="let o of i.splitDetail; let jdx = index;">
                                                     <input type="tel"
                                                         (focus)="$event.target.select()"
@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="c-control ion-text-right">
-                    <ion-button [disabled]="submitAttempt" (click)="merge()">{{'erp.app.pages.sale.sale-order.merge-arinvoice.merge' | translate}}</ion-button>
+                    <ion-button [disabled]="submitAttempt" (click)="merge()">{{'Create Invoice' | translate}}</ion-button>
                 </div>
             </div>
 

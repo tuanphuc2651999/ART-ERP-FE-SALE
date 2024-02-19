@@ -315,7 +315,7 @@ export class CloseOrderPage extends PageBase {
     async saveChange(isClosed = false, form = this.formGroup, publishEventCode = this.pageConfig.pageName, provider = this.pageProvider) {
         this.formGroup.updateValueAndValidity();
         if (!form.valid) {
-            this.env.showTranslateMessage('erp.app.app-component.page-bage.check-red-above', 'warning');
+            this.env.showTranslateMessage('Please recheck information highlighted in red above', 'warning');
         }
         else if (this.submitAttempt == false) {
 
@@ -332,7 +332,7 @@ export class CloseOrderPage extends PageBase {
                 }).catch(err => {
                     console.log(err);
                     this.submitAttempt = false;
-                    this.env.showTranslateMessage('erp.app.app-component.page-bage.can-not-save', 'danger');
+                    this.env.showTranslateMessage('Cannot save, please try again', 'danger');
                 })
         }
     }

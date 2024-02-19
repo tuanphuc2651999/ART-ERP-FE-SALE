@@ -15,7 +15,7 @@
 				<ion-row class="hr-group">
 					<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
 						<ion-list-header class="ion-no-padding">
-							<ion-label color="primary">{{'erp.app.pages.sale.sale-order.page-title' | translate}}</ion-label>
+							<ion-label color="primary">{{'Order' | translate}}</ion-label>
 						</ion-list-header>
 					</ion-col>
 					<ion-col size="12" size-sm size-xl="4">
@@ -26,10 +26,10 @@
 						</div>
 
 						<div class="c-control">
-							<label class="c-label" for="IDAddress">{{'erp.app.pages.sale.sale-order.id-address' | translate}} <small>#{{item.IDContact}}</small>
+							<label class="c-label" for="IDAddress">{{'customer' | translate}} <small>#{{item.IDContact}}</small>
 								<span *ngIf="!formGroup.controls.IDAddress.valid && !formGroup.controls.IDAddress.pending && (formGroup.controls.IDAddress.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 							</label>
-							<ng-select *ngIf="item.Id && item.IDContact && !item.IDAddress" class="c-input" (change)="changedIDAddress($event)" #IDContact labelForId="IDContact" formControlName="IDContact" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.search-placeholder' | translate}}">
+							<ng-select *ngIf="item.Id && item.IDContact && !item.IDAddress" class="c-input" (change)="changedIDAddress($event)" #IDContact labelForId="IDContact" formControlName="IDContact" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'Search for name, code or phone number' | translate}}">
 								<ng-template ng-label-tmp let-i="item">
 									{{i.Name}}
 								</ng-template>
@@ -43,7 +43,7 @@
 								</ng-template>
 							</ng-select>
 
-							<ng-select *ngIf="!item.Id || item.IDAddress" class="c-input" (change)="changedIDAddress($event)" #IDAddress labelForId="IDAddress" formControlName="IDAddress" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="IDAddress" placeholder="{{'erp.app.pages.sale.sale-order.search-placeholder' | translate}}">
+							<ng-select *ngIf="!item.Id || item.IDAddress" class="c-input" (change)="changedIDAddress($event)" #IDAddress labelForId="IDAddress" formControlName="IDAddress" [items]="contactList$ | async" [typeahead]="contactListInput$" [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="IDAddress" placeholder="{{'Search for name, code or phone number' | translate}}">
 								<ng-template ng-label-tmp let-i="item" let-a="item.Address">
 									{{i.Name}}
 									<small *ngIf="a">
@@ -67,7 +67,7 @@
 											<span *ngIf="a.Province">, {{a.Province}}</span>
 											<br *ngIf="a.AddressLine2 || a.Contact">
 											<span *ngIf="a.AddressLine2">{{a.AddressLine2}}</span>
-											<span *ngIf="a.Contact"> | {{'erp.app.pages.sale.sale-order.contact' | translate}}: {{a.Contact}}</span>
+											<span *ngIf="a.Contact"> | {{'Contact' | translate}}: {{a.Contact}}</span>
 											<span *ngIf="a.Phone1"> - {{a.Phone1}}</span>
 											<span *ngIf="a.Phone2"> - {{a.Phone2}}</span>
 										</small>
@@ -77,34 +77,34 @@
 						</div>
 
 						<div class="c-control">
-							<label class="c-label" for="OriginalTotalAfterTax">{{'erp.app.pages.sale.sale-order.original-total-after-tax-detail' | translate}}
+							<label class="c-label" for="OriginalTotalAfterTax">{{'Total amount' | translate}}
 								<span *ngIf="!formGroup.controls.OriginalTotalAfterTax.valid && !formGroup.controls.OriginalTotalAfterTax.pending && (formGroup.controls.OriginalTotalAfterTax.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 							</label>
 							<input (change)="saveChange()" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" class="c-input" id="OriginalTotalAfterTax" formControlName="OriginalTotalAfterTax" type="text">
 						</div>
 
 						<div class="c-control" *ngIf="item.OriginalTotalAfterDiscountFromSalesman != item.OriginalTotalAfterDiscount">
-							<label class="c-label" for="OriginalTotalAfterDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.original-total-after-discount-from-salesman' | translate}}</label>
+							<label class="c-label" for="OriginalTotalAfterDiscountFromSalesman">{{'Total amount paid' | translate}}</label>
 							<input [disabled]="true" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="true" suffix=" ₫" class="c-input" id="OriginalTotalAfterDiscountFromSalesman" [ngModelOptions]="{standalone: true}" [ngModel]="item.OriginalTotalAfterDiscountFromSalesman" type="text">
 						</div>
 
 					</ion-col>
 					<ion-col size="12" size-sm size-xl="4">
 						<div class="c-control" *ngIf="item.Id">
-							<label class="c-label">{{'erp.app.pages.sale.sale-order.order-date-detail' | translate}}</label>
+							<label class="c-label">{{'Order created date' | translate}}</label>
 
 							<span class="c-input disable">{{item.OrderDateText}}</span>
 						</div>
 
 						<div class="c-control">
-							<label class="c-label" for="ProductWeight">{{'erp.app.pages.sale.sale-order.product-weight' | translate}}
+							<label class="c-label" for="ProductWeight">{{'Weight' | translate}}
 								<span *ngIf="!formGroup.controls.ProductWeight.valid && !formGroup.controls.ProductWeight.pending && (formGroup.controls.ProductWeight.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 							</label>
 							<input readonly class="c-input" id="ProductWeight" formControlName="ProductWeight" type='text' mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="true" suffix=" kg">
 						</div>
 
 						<div class="c-control">
-							<label class="c-label" for="ProductDimensions">{{'erp.app.pages.sale.sale-order.product-dimensions' | translate}} <ion-text color="primary" *ngIf="item.ProductDimensionsM">{{item.ProductDimensionsM | mask: 'separator.2':','}} m³</ion-text>
+							<label class="c-label" for="ProductDimensions">{{'Volume' | translate}} <ion-text color="primary" *ngIf="item.ProductDimensionsM">{{item.ProductDimensionsM | mask: 'separator.2':','}} m³</ion-text>
 								<span *ngIf="!formGroup.controls.ProductDimensions.valid && !formGroup.controls.ProductDimensions.pending && (formGroup.controls.ProductDimensions.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 							</label>
 
@@ -114,22 +114,22 @@
 
 						<!-- <div class="c-control">
                             <label class="c-label" for=""></label>
-                            <ion-button *ngIf="!item.Id && pageConfig.canAdd" expand="block" (click)="saveChange()" [disabled]="!formGroup.dirty">{{'erp.app.pages.sale.sale-order.add-order' | translate}}</ion-button>
+                            <ion-button *ngIf="!item.Id && pageConfig.canAdd" expand="block" (click)="saveChange()" [disabled]="!formGroup.dirty">{{'add-order' | translate}}</ion-button>
                         </div> -->
 
 						<div class="c-control ion-text-right">
 							<ion-button size="small" [disabled]="!(pageConfig.canEdit || (this.pageConfig.canChangeTypeOfReviewOrder && this.item.IDStatus == 103)) || submitAttempt" (click)="item.IsSampleOrder = !item.IsSampleOrder; changedSampleOrder()" [fill]=" item.IsSampleOrder? 'solid' : 'outline' ">
-								{{'erp.app.pages.sale.sale-order.is-sample-order' | translate}}
-							</ion-button>
-							<ion-button size="small" [disabled]="!(pageConfig.canEdit || (this.pageConfig.canChangeTypeOfReviewOrder && this.item.IDStatus == 103)) || submitAttempt" (click)="item.IsShipBySaleMan = !item.IsShipBySaleMan; saveChange()" [fill]=" item.IsShipBySaleMan? 'solid' : 'outline' ">
-								{{'erp.app.pages.sale.sale-order.is-ship-by-saleman' | translate}}
+								{{'Sample' | translate}}
 							</ion-button>
 							<ion-button size="small" [disabled]="!(pageConfig.canEdit || (this.pageConfig.canChangeTypeOfReviewOrder && this.item.IDStatus == 103)) || submitAttempt" (click)="item.IsUrgentOrders = !item.IsUrgentOrders; saveChange()" [fill]=" item.IsUrgentOrders? 'solid' : 'outline' ">
-								{{'erp.app.pages.sale.sale-order.is-urgent-orders' | translate}}
+								{{'Urgent order' | translate}}
 							</ion-button>
 							<ion-button size="small" [disabled]="!(pageConfig.canEdit || (this.pageConfig.canChangeTypeOfReviewOrder && this.item.IDStatus == 103)) || submitAttempt" (click)="item.IsWholeSale = !item.IsWholeSale; saveChange()" [fill]=" item.IsWholeSale? 'solid' : 'outline' ">
-								{{'erp.app.pages.sale.sale-order.is-wholesale' | translate}}
+								{{'Wholesale customer' | translate}}
 							</ion-button>
+							<ion-button size="small" [disabled]="!(pageConfig.canEdit || (this.pageConfig.canChangeTypeOfReviewOrder && this.item.IDStatus == 103))|| submitAttempt" (click)="item.IsShipBySaleMan = !item.IsShipBySaleMan; saveChange()" [fill]=" item.IsShipBySaleMan? 'solid' : 'outline' " color="blue">
+                                {{'Coverage' | translate}}
+                            </ion-button>
 						</div>
 
 					</ion-col>
@@ -138,7 +138,7 @@
 				<!-- <ion-row class="hr-group">
                     <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
                         <ion-list-header class="ion-no-padding">
-                            <ion-label color="primary">{{'erp.app.pages.sale.sale-order.item-information-title' | translate}}</ion-label>
+                            <ion-label color="primary">{{'item-information-title' | translate}}</ion-label>
                         </ion-list-header>
                     </ion-col>
                     <ion-col size="12" size-sm size-xl="4">
@@ -160,13 +160,13 @@
 				<ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
 
 					<ion-segment-button value="s1">
-						<ion-label>{{'erp.app.pages.sale.sale-order.items-list' | translate}}</ion-label>
+						<ion-label>{{'Product list' | translate}}</ion-label>
 					</ion-segment-button>
 					<ion-segment-button value="s2">
-						<ion-label>{{'erp.app.pages.sale.sale-order.promotion' | translate}}</ion-label>
+						<ion-label>{{'Promotion/ applied discount' | translate}}</ion-label>
 					</ion-segment-button>
 					<ion-segment-button value="s3">
-						<ion-label>{{'erp.app.pages.sale.sale-order.others' | translate}}</ion-label>
+						<ion-label>{{'Other information' | translate}}</ion-label>
 					</ion-segment-button>
 
 				</ion-segment>
@@ -179,23 +179,23 @@
 						<section class="table" style="min-width: 1550px;">
 							<header class="bold">
 								<div class="col-id cell">#</div>
-								<div class="col-name cell">{{'erp.app.pages.sale.sale-order.name' | translate}}</div>
-								<div class="col-uom cell">{{'erp.app.pages.sale.sale-order.uom' | translate}}</div>
-								<div class="col-qty cell">{{'erp.app.pages.sale.sale-order.quantity' | translate}}</div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.discount-from-vendor' | translate}}" *ngIf="pageConfig.canUseDiscountFromVendor">{{'erp.app.pages.sale.sale-order.ck1' | translate}} </div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.discount-from-distributor' | translate}}" *ngIf="pageConfig.canUseDiscountFromDistributor">{{'erp.app.pages.sale.sale-order.ck2' | translate}} </div>
+								<div class="col-name cell">{{'Product' | translate}}</div>
+								<div class="col-uom cell">{{'Unit' | translate}}</div>
+								<div class="col-qty cell">{{'Quantity' | translate}}</div>
+								<div class="col-discount cell" title="{{'Discount from vendor' | translate}}" *ngIf="pageConfig.canUseDiscountFromVendor">{{'Discount 1' | translate}} </div>
+								<div class="col-discount cell" title="{{'Discount from distributor' | translate}}" *ngIf="pageConfig.canUseDiscountFromDistributor">{{'Discount 2' | translate}} </div>
 
-								<div class="col-promotion cell" title="{{'erp.app.pages.sale.sale-order.can-use-promotion-item' | translate}}" *ngIf="pageConfig.canUsePromotionItem">{{'erp.app.pages.sale.sale-order.km' | translate}} </div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.ck-sp-title' | translate}}">{{'erp.app.pages.sale.sale-order.ck-sp' | translate}}</div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.ck-title' | translate}}">{{'erp.app.pages.sale.sale-order.ck' | translate}} <br>{{'erp.app.pages.sale.sale-order.group' | translate}} </div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.line-title' | translate}}">{{'erp.app.pages.sale.sale-order.ck' | translate}} <br>{{'erp.app.pages.sale.sale-order.line' | translate}} </div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.invoice-title' | translate}}">{{'erp.app.pages.sale.sale-order.ck' | translate}} <br>{{'erp.app.pages.sale.sale-order.invoice' | translate}} </div>
-								<div class="col-price cell">{{'erp.app.pages.sale.sale-order.price' | translate}}</div>
-								<div class="col-total cell">{{'erp.app.pages.sale.sale-order.total' | translate}}</div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.discount-from-salesman-title' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.discount-from-salesman' | translate}} </div>
-								<div class="col-discount cell" title="{{'erp.app.pages.sale.sale-order.price-discount-from-saleman-title' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.price-discount-from-saleman' | translate}} <br> {{'erp.app.pages.sale.sale-order.after-discount' | translate}}</div>
-								<div class="col-total cell" title="{{'erp.app.pages.sale.sale-order.total-after-tax-title' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'erp.app.pages.sale.sale-order.total-after-tax' | translate}} </div>
-								<div class="col-price cell">{{'erp.app.pages.sale.sale-order.vat' | translate}}</div>
+								<div class="col-promotion cell" title="{{'Promotion goods' | translate}}" *ngIf="pageConfig.canUsePromotionItem">{{'Promotion' | translate}} </div>
+								<div class="col-discount cell" title="{{'Discount per product' | translate}}">{{'Discount/product' | translate}}</div>
+								<div class="col-discount cell" title="{{'= [%discount] * [value before discount]' | translate}}">{{'Discount by group' | translate}} </div>
+								<div class="col-discount cell" title="{{'= [Discount /product] + [Group discount]' | translate}}">{{'Discount by line' | translate}} </div>
+								<div class="col-discount cell" title="{{'= [%Discount] * ([value before discount] - [Line discount])' | translate}}">{{'Discount by order' | translate}} </div>
+								<div class="col-price cell">{{'Unit price' | translate}}</div>
+								<div class="col-total cell">{{'Amount' | translate}}</div>
+								<div class="col-discount cell" title="{{'Discount from saleman' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'Discount from saleman' | translate}} </div>
+								<div class="col-discount cell" title="{{'Unit price before salesman discount' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'Unit price' | translate}} <br> {{'(before discount from salesman)' | translate}}</div>
+								<div class="col-total cell" title="{{'[Customer pays] = [Total amount] - [Discount 3]' | translate}}" *ngIf="pageConfig.canUseDiscountFromSalesman">{{'Customers payable' | translate}} </div>
+								<div class="col-price cell">{{'VAT(%)' | translate}}</div>
 								<div *ngIf="pageConfig.SOIsShowOrderDetailRemark" class="col-remark cell">Remark</div>
 								<div class="col-del cell" *ngIf="pageConfig.canEdit"></div>
 							</header>
@@ -204,7 +204,7 @@
 
 								<div class="col-id cell">{{idx+1}}</div>
 								<div class="col-name cell">
-									<ng-select appendTo="#order-detail-page" [disabled]="!pageConfig.canEdit || submitAttempt" class="c-input" [(ngModel)]="i.IDItem" (change)="changedIDItem($event, i)" [labelForId]="'IDItem'+idx" [items]="itemList$ | async" [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.search-placeholder' | translate}}">
+									<ng-select appendTo="#order-detail-page" [disabled]="!pageConfig.canEdit || submitAttempt" class="c-input" [(ngModel)]="i.IDItem" (change)="changedIDItem($event, i)" [labelForId]="'IDItem'+idx" [items]="itemList$ | async" [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'Search for name, code or phone number' | translate}}">
 										<ng-template ng-label-tmp let-i="item">
 											<b *ngIf="i.Code" [title]="i.Id" [title]="i.Name">
 												{{i.Code}}
@@ -221,7 +221,7 @@
 								</div>
 								<div class="col-uom cell">
 									<select [disabled]="!pageConfig.canEdit || submitAttempt" class="c-input c-dropdown" (change)="changedItemUoM(i)" [(ngModel)]="i.IDUoM" *ngIf="i._itemData && i._itemData.UoMs.length">
-										<option value="">{{'erp.app.pages.sale.sale-order.unit-option' | translate}}</option>
+										<option value="">{{'Select unit' | translate}}</option>
 										<option [disabled]="t.Flag" *ngFor="let t of i._itemData.UoMs" [value]="t.Id">{{t.Name}}</option>
 									</select>
 								</div>
@@ -284,14 +284,14 @@
 
 							<div class="row" *ngIf="item.Id && item?.OrderLines?.length > 1">
 								<div class="col-id cell" *ngIf="pageConfig.canEdit" (click)="addOrderLine()">
-									<ion-icon class="min-btn" title="{{'erp.app.pages.sale.sale-order.add-order-line' | translate}}" name="add-circle-outline"></ion-icon>
+									<ion-icon class="min-btn" title="{{'Add product' | translate}}" name="add-circle-outline"></ion-icon>
 								</div>
 								<div class="col-id cell" *ngIf="!pageConfig.canEdit"></div>
 								<div class="col-name cell">
-									<b (click)="addOrderLine()" *ngIf="pageConfig.canEdit">{{'erp.app.pages.sale.sale-order.add-order-line' | translate}}</b>
+									<b (click)="addOrderLine()" *ngIf="pageConfig.canEdit">{{'Add product' | translate}}</b>
 								</div>
 								<div class="col-uom cell">
-									<b>{{'erp.app.pages.sale.sale-order.sum-up' | translate}}:</b>
+									<b>{{'Total' | translate}}:</b>
 								</div>
 
 								<div class="col-qty cell"></div>
@@ -344,7 +344,7 @@
 							<div class="cell">
 								<ion-button fill="clear" size="small" (click)="addOrderLine()">
 									<ion-icon slot="start" name="add-circle-outline"></ion-icon>
-									{{'erp.app.pages.sale.sale-order.add-order-line' | translate}}
+									{{'Add product' | translate}}
 								</ion-button>
 							</div>
 						</div>
@@ -359,17 +359,17 @@
                                 <ion-row [formGroup]="line" class="hr-group" *ngFor="let line of OrderLines.controls; let idx = index;">
                                     <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
                                         <ion-list-header class="ion-no-padding">
-                                            <ion-label color="primary">{{'erp.app.pages.sale.sale-order.line-header' | translate}} #{{idx+1}}</ion-label>
+                                            <ion-label color="primary">{{'line-header' | translate}} #{{idx+1}}</ion-label>
                                         </ion-list-header>
                                     </ion-col>
                                     <ion-col size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4">
 
                                         <div class="c-control">
-                                            <label class="c-label" [for]="'IDItem'+idx">{{'erp.app.pages.sale.sale-order.item' | translate}}
+                                            <label class="c-label" [for]="'IDItem'+idx">{{'item' | translate}}
                                                 <span *ngIf="!line.controls.IDItem.valid && !line.controls.IDItem.pending && (line.controls.IDItem.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                                             </label>
 
-                                            <ng-select class="c-input" (change)="changedIDItem($event)" #IDItem [labelForId]="'IDItem'+idx" formControlName="IDItem" [items]="itemList$ | async" [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.item-placeholder' | translate}}">
+                                            <ng-select class="c-input" (change)="changedIDItem($event)" #IDItem [labelForId]="'IDItem'+idx" formControlName="IDItem" [items]="itemList$ | async" [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name" bindValue="Id" placeholder="{{'item-placeholder' | translate}}">
                                                 <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                                                     <div *ngIf="i">
                                                         <div><span [ngOptionHighlight]="search">{{i.Name}}</span></div>
@@ -380,7 +380,7 @@
                                         </div>
 
                                         <div class="c-control">
-                                            <label class="c-label" [for]="'Quantity'+idx">{{'erp.app.pages.sale.sale-order.quantity' | translate}}
+                                            <label class="c-label" [for]="'Quantity'+idx">{{'Quantity' | translate}}
                                                 <span *ngIf="!line.controls.Quantity.valid && !line.controls.Quantity.pending && (line.controls.Quantity.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                                             </label>
                                             <input (change)="saveChange()" class="c-input" [id]="'Quantity'+idx" formControlName="Quantity" type="number">
@@ -390,14 +390,14 @@
                                     <ion-col size-xs="6" size-sm="6" size-md="3" size-lg="3" size-xl="2">
 
                                         <div class="c-control">
-                                            <label class="c-label" [for]="'IDUoM'+idx">{{'erp.app.pages.sale.sale-order.id-uom' | translate}}</label>
+                                            <label class="c-label" [for]="'IDUoM'+idx">{{'id-uom' | translate}}</label>
                                             <input class="c-input" [id]="'IDUoM'+idx" formControlName="IDUoM">
                                         </div>
 
                                     </ion-col>
                                     <ion-col size-xs="6" size-sm="6" size-md="3" size-lg="3" size-sm size-xl="2">
                                         <div class="c-control">
-                                            <label class="c-label" [for]="'UoMPrice'+idx">{{'erp.app.pages.sale.sale-order.uom-price' | translate}}</label>
+                                            <label class="c-label" [for]="'UoMPrice'+idx">{{'uom-price' | translate}}</label>
                                             <input class="c-input" [id]="'UoMPrice'+idx" formControlName="UoMPrice" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="false">
                                         </div>
 
@@ -417,98 +417,34 @@
 					<div class="ion-padding">
 
 						<ion-grid fixed>
-
-
-							<ion-row class="hr-group" *ngIf="contactSelected">
-								<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
-									<ion-list-header class="ion-no-padding">
-										<ion-label color="primary">{{'erp.app.pages.sale.sale-order.customer-information' | translate}}</ion-label>
-									</ion-list-header>
-								</ion-col>
-								<ion-col size="12" size-sm size-xl="4">
-									<div class="c-control">
-										<label class="c-label">#{{'erp.app.pages.sale.sale-order.id-short' | translate}} <small><a [href]="'#/'+'business-partner/'+contactSelected.Id" (click)="nav('business-partner/'+contactSelected.Id,'forward')"> 🔗 {{'erp.app.pages.sale.sale-order.more' | translate}}</a></small></label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.Id" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-code' | translate}}</label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.Code" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-address' | translate}}
-											<small>
-												<a *ngIf="!(contactSelected.Lat && contactSelected.Long)" target="_blank" [href]="'https://www.google.com/maps/search/'+contactSelected.AddressLine1"> 📍 {{'erp.app.pages.sale.sale-order.map' | translate}}</a>
-												<a *ngIf="contactSelected.Lat && contactSelected.Long" target="_blank" [href]="'https://www.google.com/maps/place/'+contactSelected.Lat+','+contactSelected.Long"> 📍 {{'erp.app.pages.sale.sale-order.map' | translate}}</a>
-											</small>
-										</label>
-										<textarea readonly class="c-input" [(ngModel)]="contactSelected.AddressLine1" [ngModelOptions]="{standalone: true}" type="textarea"></textarea>
-									</div>
-
-
-									<div class="c-control">
-										<input id="IsPersonal1" disabled type="radio" [value]="true" [(ngModel)]="contactSelected.IsPersonal" [ngModelOptions]="{standalone: true}" class="c-checkbox">
-										<label class="c-label radio" for="IsPersonal1">
-											<span>{{'erp.app.pages.sale.sale-order.radio-personal' | translate}}</span>
-										</label>
-
-										<input id="IsPersonal2" disabled type="radio" [value]="false" [(ngModel)]="contactSelected.IsPersonal" [ngModelOptions]="{standalone: true}" class="c-checkbox">
-										<label class="c-label radio" for="IsPersonal2">
-											<span>{{'erp.app.pages.sale.sale-order.radio-cooperate' | translate}}</span>
-										</label>
-									</div>
-
-								</ion-col>
-								<ion-col size="12" size-sm size-xl="4">
-									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-name' | translate}}</label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.Name" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-
-									<div class="c-control" *ngIf="!contactSelected.IsPersonal">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-company-name' | translate}}</label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.CompanyName" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-
-									<div class="c-control" *ngIf="!contactSelected.IsPersonal">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-tax-code' | translate}}</label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.TaxCode" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-
-
-									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-workphone' | translate}} <small *ngIf="contactSelected.WorkPhone"><a [href]="'tel:'+contactSelected.WorkPhone"> ☏ {{'erp.app.pages.sale.sale-order.call' | translate}}</a></small></label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.WorkPhone" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.contact-mobile-phone' | translate}} <small *ngIf="contactSelected.MobilePhone"><a [href]="'tel:'+contactSelected.MobilePhone"> ☏ {{'erp.app.pages.sale.sale-order.call' | translate}}</a></small></label>
-										<input readonly class="c-input" [(ngModel)]="contactSelected.MobilePhone" [ngModelOptions]="{standalone: true}" type="text">
-									</div>
-
-								</ion-col>
-							</ion-row>
 							<form [formGroup]="formGroup">
 								<ion-row class="hr-group">
 									<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
 										<ion-list-header class="ion-no-padding">
-											<ion-label color="primary">{{'erp.app.pages.sale.sale-order.order-information' | translate}}</ion-label>
+											<ion-label color="primary">{{'Order information' | translate}}</ion-label>
 										</ion-list-header>
 									</ion-col>
 									<ion-col size="12" size-sm size-xl="4">
+
 										<div class="c-control">
-											<label class="c-label" for="Code">{{'erp.app.pages.sale.sale-order.order-code' | translate}} <small>{{'erp.app.pages.sale.sale-order.order-code-union' | translate}}</small>
+											<label class="c-label" for="Code">{{'Code' | translate}}
 												<span *ngIf="!formGroup.controls.Code.valid && !formGroup.controls.Code.pending && (formGroup.controls.Code.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 											</label>
 											<input (change)="saveChange()" class="c-input" id="Code" formControlName="Code" type="text">
 										</div>
 										<div class="c-control">
-											<label class="c-label" for="Name">{{'erp.app.pages.sale.sale-order.order-name' | translate}}
+											<label class="c-label" for="Name">{{'Content' | translate}}
 												<span *ngIf="!formGroup.controls.Name.valid && !formGroup.controls.Name.pending && (formGroup.controls.Name.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 											</label>
 											<input (change)="saveChange()" class="c-input" id="Name" formControlName="Name" type="text">
 										</div>
 
+										<app-form-control [field]="{id:'TaxCode', label: 'Invoice required', type : 'select', dataSource: TaxCodeDataSource, bindLabel: 'CompanyName', bindValue: 'TaxCode', form : formGroup }" (change)="saveChange()"></app-form-control>
+
+										
+
 										<div class="c-control">
-											<label class="c-label" for="IDStatus">{{'erp.app.pages.sale.sale-order.order-idstatus' | translate}}
+											<label class="c-label" for="IDStatus">{{'Order Status' | translate}}
 												<span *ngIf="!formGroup.controls.IDStatus.valid && !formGroup.controls.IDStatus.pending && (formGroup.controls.IDStatus.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 											</label>
 											<select (change)="saveChange()" class="c-input c-dropdown" formControlName="IDStatus">
@@ -516,24 +452,7 @@
 
 											</select>
 										</div>
-
-										<div class="c-control" *ngIf="item.IDBranch">
-											<label class="c-label" for="IDBranch">{{'erp.app.pages.sale.sale-order.order-idbranch' | translate}}
-												<span *ngIf="!formGroup.controls.IDBranch.valid && !formGroup.controls.IDBranch.pending && (formGroup.controls.IDBranch.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-											</label>
-											<select (change)="saveChange()" class="c-input c-dropdown" formControlName="IDBranch">
-												<option *ngIf="branch" [value]="branch.Id">{{branch.Name}}</option>
-											</select>
-										</div>
-
-										<div class="c-control" *ngIf="item.IDOwner">
-											<label class="c-label" for="IDOwner">{{'erp.app.pages.sale.sale-order.order-idowner' | translate}}
-												<span *ngIf="!formGroup.controls.IDOwner.valid && !formGroup.controls.IDOwner.pending && (formGroup.controls.IDOwner.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-											</label>
-											<select class="c-input c-dropdown" formControlName="IDOwner">
-												<option *ngIf="saller" [value]="saller.Id">{{saller.FullName}}</option>
-											</select>
-										</div>
+									
 
 										<div class="c-control">
 											<label class="c-label" for="Type">Type
@@ -553,57 +472,7 @@
 											</select>
 										</div>
 
-										<div class="c-control">
-											<label class="c-label" for="PaymentMethod">Payment method
-												<span *ngIf="!formGroup.controls.PaymentMethod.valid && !formGroup.controls.PaymentMethod.pending && (formGroup.controls.PaymentMethod.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-											</label>
-											<select (change)="saveChange()" class="c-input c-dropdown" formControlName="PaymentMethod">
-												<option *ngFor="let t of paymentMethodList" [value]="t.Code">{{t.Name}}</option>
-											</select>
-										</div>
-
-
-
-										<!-- <div class="c-control">
-                                            <label class="c-label" for="IDType">{{'erp.app.pages.sale.sale-order.id-type' | translate}}
-                                                <span *ngIf="!formGroup.controls.IDType.valid && !formGroup.controls.IDType.pending && (formGroup.controls.IDType.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                                            </label>
-                                            <select class="c-input c-dropdown" formControlName="IDType">
-                                                <option [value]="1">{{'erp.app.pages.sale.sale-order.type-sales-order' | translate}}</option>
-                                                <option [value]="2">{{'erp.app.pages.sale.sale-order.type-purchase-order' | translate}}</option>
-                                                <option [value]="3">{{'erp.app.pages.sale.sale-order.type-ship-order' | translate}}</option>
-                                                <option [value]="4">...</option>
-                                            </select>
-                                        </div> -->
-
-										<!-- OriginalTotalBeforeDiscount decimal(18, 2) Unchecked
-                                        OriginalPromotion decimal(18, 4) Unchecked
-                                        OriginalDiscount1 decimal(18, 4) Unchecked
-                                        OriginalDiscount2 decimal(18, 4) Unchecked
-                                        OriginalDiscountByItem decimal(18, 4) Unchecked
-                                        OriginalDiscountByGroup decimal(18, 4) Unchecked
-                                        OriginalDiscountByLine decimal(18, 4) Unchecked
-                                        OriginalDiscountByOrder decimal(18, 4) Unchecked
-                                        OriginalTotalDiscount decimal(18, 2) Unchecked
-                                        OriginalTotalAfterDiscount decimal(18, 2) Unchecked
-                                        OriginalTax decimal(18, 2) Unchecked
-                                        OriginalTotalAfterTax decimal(18, 4) Unchecked -->
-
-										<!-- TotalBeforeDiscount decimal(18, 2) Unchecked
-                                        Promotion decimal(18, 4) Unchecked
-                                        Discount1 decimal(18, 4) Unchecked
-                                        Discount2 decimal(18, 4) Unchecked
-                                        DiscountByItem decimal(18, 4) Unchecked
-                                        DiscountByGroup decimal(18, 4) Unchecked
-                                        DiscountByLine decimal(18, 4) Unchecked
-                                        DiscountByOrder decimal(18, 4) Unchecked
-                                        TotalDiscount decimal(18, 2) Unchecked
-                                        TotalAfterDiscount decimal(18, 4) Unchecked
-                                        Tax decimal(18, 2) Unchecked
-                                        TotalAfterTax decimal(18, 2) Unchecked -->
-
-
-
+										
 									</ion-col>
 									<ion-col size="12" size-sm size-xl="4">
 										<div class="c-control" *ngIf="item.Id">
@@ -613,8 +482,17 @@
 											<input (change)="saveChange()" formControlName="ExpectedDeliveryDate" class="c-input" id="ExpectedDeliveryDate" type="datetime-local">
 										</div>
 
+										<div class="c-control" *ngIf="item.IDOwner">
+											<label class="c-label" for="IDOwner">{{'Sales staff' | translate}}
+												<span *ngIf="!formGroup.controls.IDOwner.valid && !formGroup.controls.IDOwner.pending && (formGroup.controls.IDOwner.dirty || submitAttempt)" ion-text color="danger">(*)</span>
+											</label>
+											<select class="c-input c-dropdown" formControlName="IDOwner">
+												<option *ngIf="saller" [value]="saller.Id">{{saller.FullName}}</option>
+											</select>
+										</div>
+
 										<div class="c-control">
-											<label class="c-label" for="IDOpportunity">{{'erp.app.pages.sale.sale-order.order-idopportunity' | translate}}
+											<label class="c-label" for="IDOpportunity">{{'Opportunity' | translate}}
 												<span *ngIf="!formGroup.controls.IDOpportunity.valid && !formGroup.controls.IDOpportunity.pending && (formGroup.controls.IDOpportunity.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 											</label>
 											<select class="c-input c-dropdown" formControlName="IDOpportunity">
@@ -623,7 +501,7 @@
 										</div>
 
 										<div class="c-control">
-											<label class="c-label" for="IDContract">{{'erp.app.pages.sale.sale-order.order-idcontract' | translate}}
+											<label class="c-label" for="IDContract">{{'Contract' | translate}}
 												<span *ngIf="!formGroup.controls.IDContract.valid && !formGroup.controls.IDContract.pending && (formGroup.controls.IDContract.dirty || submitAttempt)" ion-text color="danger">(*)</span>
 											</label>
 											<select class="c-input c-dropdown" formControlName="IDContract">
@@ -632,60 +510,63 @@
 										</div>
 
 										<div class="c-control">
-											<label class="c-label">{{'erp.app.pages.sale.sale-order.order-remark' | translate}}</label>
-											<textarea (change)="saveChange()" class="c-input" id="Remark" formControlName="Remark" type="textarea"></textarea>
+											<label class="c-label" for="PaymentMethod">Payment method
+												<span *ngIf="!formGroup.controls.PaymentMethod.valid && !formGroup.controls.PaymentMethod.pending && (formGroup.controls.PaymentMethod.dirty || submitAttempt)" ion-text color="danger">(*)</span>
+											</label>
+											<select (change)="saveChange()" class="c-input c-dropdown" formControlName="PaymentMethod">
+												<option *ngFor="let t of paymentMethodList" [value]="t.Code">{{t.Name}}</option>
+											</select>
 										</div>
 
-										<div class="c-control" *ngIf="item.Id">
-											<input (change)="saveChange()" class="c-checkbox" id="IsDisabled" formControlName="IsDisabled" type="checkbox">
-											<label class="c-label checkbox" for="IsDisabled">{{'erp.app.pages.sale.sale-order.order-disabled' | translate}}
-												<span *ngIf="!formGroup.controls.IsDisabled.valid && !formGroup.controls.IsDisabled.pending && (formGroup.controls.IsDisabled.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-											</label>
-										</div>
+									
+										
+										
+
+
 									</ion-col>
 								</ion-row>
 							</form>
 							<ion-row class="hr-group">
 								<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
 									<ion-list-header class="ion-no-padding">
-										<ion-label color="primary">{{'erp.app.pages.sale.sale-order.shipping-information' | translate}}</ion-label>
+										<ion-label color="primary">{{'delivery information' | translate}}</ion-label>
 									</ion-list-header>
 								</ion-col>
 								<ion-col size="12" size-sm size-xl="4">
 
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-code' | translate}} </label>
+										<label class="c-label">{{'Bill No.' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.Code" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-route' | translate}} </label>
+										<label class="c-label">{{'Route' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.Route" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-sellman' | translate}} </label>
+										<label class="c-label">{{'Shipper' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.Route" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-vehiclenumber' | translate}} </label>
+										<label class="c-label">{{'License plate' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.VehicleNumber" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 								</ion-col>
 								<ion-col size="12" size-sm size-xl="4">
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-estimated-delivery' | translate}} </label>
+										<label class="c-label">{{'Expected delivery date' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.Route" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-shipped-date' | translate}} </label>
+										<label class="c-label">{{'Delivery date' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="billOfLanding.ShippedDate" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.bl-shipping-address' | translate}} </label>
+										<label class="c-label">{{'Address' | translate}} </label>
 										<textarea readonly class="c-input" [(ngModel)]="billOfLanding.ShippingAddress" [ngModelOptions]="{standalone: true}" type="textarea"></textarea>
 									</div>
 									<!-- <div class="c-control">
-                                        <label class="c-label">{{'erp.app.pages.sale.sale-order.shipping-address-remark' | translate}}</label>
+                                        <label class="c-label">{{'shipping-address-remark' | translate}}</label>
                                         <textarea readonly class="c-input" [(ngModel)]="billOfLanding.ShippingAddressRemark" [ngModelOptions]="{standalone: true}" type="textarea"></textarea>
                                     </div> -->
 
@@ -696,23 +577,23 @@
 							<ion-row class="hr-group">
 								<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
 									<ion-list-header class="ion-no-padding">
-										<ion-label color="primary">{{'erp.app.pages.sale.sale-order.documents-debts' | translate}}</ion-label>
+										<ion-label color="primary">{{'Documents / debts' | translate}}</ion-label>
 									</ion-list-header>
 								</ion-col>
 								<ion-col size="12" size-sm size-xl="4">
 
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-total-after-tax' | translate}} </label>
+										<label class="c-label">{{'Total' | translate}} </label>
 										<input readonly class="c-input" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="false" suffix=" ₫" [(ngModel)]="item.OriginalTotalAfterTax" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-received' | translate}} </label>
+										<label class="c-label">{{'Received' | translate}} </label>
 										<input readonly class="c-input" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="false" suffix=" ₫" [(ngModel)]="item.Received" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-debt' | translate}} </label>
+										<label class="c-label">{{'Remaining debt' | translate}} </label>
 										<input readonly class="c-input" mask="separator.2" thousandSeparator="," [allowNegativeNumbers]="false" suffix=" ₫" [(ngModel)]="item.Debt" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 
@@ -722,17 +603,38 @@
 								</ion-col>
 								<ion-col size="12" size-sm size-xl="4">
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-invoice-number' | translate}}</label>
+										<label class="c-label">{{'Invoice' | translate}}</label>
 										<input readonly class="c-input" [(ngModel)]="item.InvoiceNumber" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-invoice-date' | translate}} </label>
+										<label class="c-label">{{'Invoice date' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="item.InvoiceDate" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
 									<div class="c-control">
-										<label class="c-label">{{'erp.app.pages.sale.sale-order.item-tax-rate' | translate}} </label>
+										<label class="c-label">{{'Tax' | translate}} </label>
 										<input readonly class="c-input" [(ngModel)]="item.TaxRate" [ngModelOptions]="{standalone: true}" type="text">
 									</div>
+								</ion-col>
+
+								
+							</ion-row>
+
+							<!-- Other information -->
+							<ion-row class="hr-group" *ngIf="item.Id">
+								<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+									<ion-list-header class="ion-no-padding">
+										<ion-label color="primary">{{'Other information' | translate}}</ion-label>
+									</ion-list-header>
+								</ion-col>
+								<ion-col size="12" size-sm size-xl="4">
+									<app-form-control [field]="{id:'CreatedBy', type : 'text', label: 'Created by', form : formGroup }"></app-form-control>
+									<app-form-control [field]="{id:'CreatedDate', type : 'span-datetime', label: 'Created date', form : formGroup }"></app-form-control>
+									<app-form-control [field]="{id:'ModifiedBy', type : 'text', label: 'Last modified by', form : formGroup }"></app-form-control>
+									<app-form-control [field]="{id:'ModifiedDate', type : 'span-datetime', label: 'Last modified date', form : formGroup }"></app-form-control>
+								</ion-col>
+								<ion-col size="12" size-sm size-xl="4">
+									<app-form-control [field]="{id:'IDBranch', type : 'branch-breadcrumbs', label: 'Branch', form : formGroup, dataSource:env.branchList }"></app-form-control>
+									<app-form-control [field]="{id:'Remark', type : 'textarea', label: 'Remark', form : formGroup }" (change)="saveChange()"></app-form-control>
 								</ion-col>
 							</ion-row>
 

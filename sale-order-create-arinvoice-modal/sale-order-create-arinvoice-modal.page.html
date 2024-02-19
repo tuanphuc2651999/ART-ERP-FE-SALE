@@ -4,10 +4,10 @@
     <ion-toolbar color="primary">
         <ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
             <ion-segment-button value="s1">
-                <ion-label>{{'erp.app.pages.sale.sale-order.create-arinvoice.split-order' | translate}}</ion-label>
+                <ion-label>{{'split order' | translate}}</ion-label>
             </ion-segment-button>
             <ion-segment-button value="s2">
-                <ion-label>{{'erp.app.pages.sale.sale-order.create-arinvoice.detail' | translate}}</ion-label>
+                <ion-label>{{'Details' | translate}}</ion-label>
             </ion-segment-button>
 
             <!-- <ion-segment-button [value]="idx" *ngFor="let o of item.SplitedInvoices; let idx = index;">
@@ -16,14 +16,14 @@
         </ion-segment>
         <ion-buttons slot="end">
             <ion-button (click)="addSplitedInvoice()">
-                <ion-icon class="min-btn" title="{{'erp.app.pages.sale.sale-order.create-arinvoice.add' | translate}}" name="add-circle-outline"></ion-icon>
+                <ion-icon class="min-btn" title="{{'Add' | translate}}" name="add-circle-outline"></ion-icon>
             </ion-button>
 
-            <ion-button title="{{'erp.app.pages.sale.sale-order.create-arinvoice.help' | translate}}" (click)="help()">
+            <ion-button title="{{'Help' | translate}}" (click)="help()">
                 <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
             </ion-button>
 
-            <ion-button title="{{'erp.app.pages.sale.sale-order.create-arinvoice.close-modal' | translate}}" (click)="closeModal()">
+            <ion-button title="{{'Close' | translate}}" (click)="closeModal()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
 
@@ -43,14 +43,14 @@
                 <ion-col size="11">
                     <div class="c-control">
                         <label class="c-label" for="IDContact">
-                            {{'erp.app.pages.sale.sale-order.create-arinvoice.idcontact' | translate}} #{{idx+1}})
+                            {{'Customer (Individual)' | translate}} #{{idx+1}})
                         </label>
 
                         <ng-select [(ngModel)]="o.IDContact" appendTo="#order-detail-page" class="c-input"
                             (change)="changedIDContact($event, o)" #IDContact labelForId="IDContact"
                             [items]="contactList$ | async" [typeahead]="contactListInput$"
                             [loading]='contactListLoading' [virtualScroll]="true" bindLabel="Name" bindValue="Id"
-                            placeholder="{{'erp.app.pages.sale.sale-order.create-arinvoice.placeholder-iditem' | translate}}">
+                            placeholder="{{'Search for name or product code' | translate}}">
                             <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                                 <div *ngIf="i">
                                     <div>
@@ -77,7 +77,7 @@
                 <ion-col size="11">
                     <div class="c-control ion-text-right">
                         <ion-button (click)="addSplitedInvoice()">
-                            {{'erp.app.pages.sale.sale-order.create-arinvoice.add-splited-invoice' | translate}}
+                            {{'Add order' | translate}}
                         </ion-button>
                     </div>
                 </ion-col>
@@ -107,7 +107,7 @@
                                                 appendTo="#order-detail-page" [(ngModel)]="i.IDItem"
                                                 [labelForId]="'IDItem'+idx" [items]="itemList$ | async"
                                                 [typeahead]="itemListInput$" [virtualScroll]="true" bindLabel="Name"
-                                                bindValue="Id" placeholder="{{'erp.app.pages.sale.sale-order.create-arinvoice.placeholder-idcontact' | translate}}">
+                                                bindValue="Id" placeholder="{{'Search for name, code or phone number' | translate}}">
                                                 <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                                                     <div *ngIf="i">
                                                         <div><span>{{i.Name}}</span></div>
@@ -120,7 +120,7 @@
 
                                         <table style="max-width: 100%; min-width: 100%;">
                                             <tr *ngIf="i._itemData && i._itemData.UoMs.length">
-                                                <td class="label">{{'erp.app.pages.sale.sale-order.create-arinvoice.unit' | translate}}</td>
+                                                <td class="label">{{'Unit' | translate}}</td>
                                                 <td class="UoM col-total c-control"
                                                     *ngFor="let o of i.splitDetail; let jdx = index;">
                                                     <span class="c-input c-dropdown">{{o.UoMName}}</span>
@@ -133,7 +133,7 @@
                                                 </td>
                                             </tr>
                                             <tr *ngIf="i._itemData && i.IDUoM">
-                                                <td class="label">{{'erp.app.pages.sale.sale-order.quantity' | translate}}</td>
+                                                <td class="label">{{'Quantity' | translate}}</td>
                                                 <td *ngFor="let o of i.splitDetail; let jdx = index;">
                                                     <input type="tel"
                                                         (focus)="$event.target.select()"
@@ -160,7 +160,7 @@
                         <div class="cell">
                             <ion-button (click)="splitARInvoice()" [disabled]="!isCanSplit || submitAttempt"
                                 style="max-width: 300px" class="ion-margin ion-float-right" size="block">
-                                {{'erp.app.pages.sale.sale-order.create-arinvoice.split-arinvoice' | translate}}
+                                {{'Split Order' | translate}}
                             </ion-button>
                         </div>
                     </div>

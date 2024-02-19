@@ -115,6 +115,8 @@ export class SaleOrderDetailPage extends PageBase {
             Debt: [''],
             IsDebt: [''],
             IsPaymentReceived: [''],
+
+            TaxCode: [''],
             InvoiceNumber: [''],
             InvoicDate: [''],
             Sort: [''],
@@ -204,8 +206,8 @@ export class SaleOrderDetailPage extends PageBase {
             this.env.getType('FMCGSalesOrder'),
             this.env.getType('PaymentMethod'),
             this.sysConfigProvider.read({ Code_in: sysConfigQuery, IDBranch: this.env.selectedBranch }),
-            
-        ]).then((results:any)=>{
+
+        ]).then((results: any) => {
             this.statusList = results[0];
             this.typeList = results[1];
             this.subTypeList = results[2];
@@ -218,7 +220,7 @@ export class SaleOrderDetailPage extends PageBase {
                 this.pageConfig[e.Code] = JSON.parse(e.Value);
             });
         })
-        
+
         super.preLoadData(event);
     }
 
@@ -276,6 +278,8 @@ export class SaleOrderDetailPage extends PageBase {
             this.item.OrderDateText = lib.dateFormat(this.item.OrderDate, 'hh:MM dd/mm/yyyy');
             //this.orderLineFormGroups.clear();
 
+            this.LoadTaxCodeDataSource(this.item._Customer);
+
             this.orderDetailProvider.read({ IDOrder: this.id }).then((result: any) => {
                 this.item.OrderLines = result.data;
                 let count = 0;
@@ -332,7 +336,7 @@ export class SaleOrderDetailPage extends PageBase {
         }
 
         if (this.item._Customer) {
-            this.contactProvider.search({ Take: 20, Skip: 0, Term: this.item.IDContact }).subscribe((data: any) => {
+            this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: true, Term: 'BP:' + this.item.IDContact }).subscribe((data: any) => {
                 this.contactListSelected.push(this.item._Customer);
                 this.contactSearch();
                 this.cdr.detectChanges();
@@ -356,9 +360,21 @@ export class SaleOrderDetailPage extends PageBase {
 
     }
 
+    TaxCodeDataSource = [];
+    LoadTaxCodeDataSource(i) {
+        this.TaxCodeDataSource = [];
+        this.contactSelected = i;
+        if(i?.TaxAddresses){
+            this.TaxCodeDataSource = i.TaxAddresses;
+        }
+        this.TaxCodeDataSource.unshift({ CompanyName: '----------', disabled: true });
+        this.TaxCodeDataSource.unshift({ TaxCode: '-1', CompanyName: 'Xuất khách vãng lai' });
+        this.TaxCodeDataSource.unshift({ TaxCode: null, CompanyName: 'Xuất theo MST mặc định' });
+    }
+
     changedIDAddress(i) {
         if (i) {
-            this.contactSelected = i;
+            this.LoadTaxCodeDataSource(i);
             this.item.IDContact = i.Id;
             this.formGroup.controls.IDContact.setValue(i.Id);
             this.formGroup.controls.IDContact.markAsDirty();
@@ -395,7 +411,7 @@ export class SaleOrderDetailPage extends PageBase {
             this.contactListInput$.pipe(
                 distinctUntilChanged(),
                 tap(() => this.contactListLoading = true),
-                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: term ? false: true, Term: term ? term : 'BP:'+  this.item.IDContact }).pipe(
+                switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, SkipMCP: term ? false : true, Term: term ? term : 'BP:' + this.item.IDContact }).pipe(
                     catchError(() => of([])), // empty list on error
                     tap(() => this.contactListLoading = false)
                 ))
@@ -635,7 +651,7 @@ export class SaleOrderDetailPage extends PageBase {
                 line._ShowPriceWarning = true;
                 //line.OriginalDiscount2 = (line.UoMPrice - line.BuyPrice) * line.Quantity;
             }
-            else{
+            else {
                 line._ShowPriceWarning = false;
             }
 
@@ -764,7 +780,7 @@ export class SaleOrderDetailPage extends PageBase {
         }
 
         if (this.item.OriginalDiscountFromSalesman < 0) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save-negative-order','danger', null, 0, true);
+            this.env.showTranslateMessage('Order not saved as discount from sales man less than 0', 'danger', null, 0, true);
         }
         else {
             this.formGroup.patchValue(this.item);
@@ -841,9 +857,9 @@ export class SaleOrderDetailPage extends PageBase {
 
     async createARInvoice(o) {
         let IDStatus = this.selectedItems[0].Status.IDStatus;
-        
-        if (IDStatus == 101 ||IDStatus == 102 ||IDStatus == 103 ||IDStatus == 110 ||IDStatus == 111 ||IDStatus == 112 ||IDStatus == 115) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-invoice-status','warning');
+
+        if (IDStatus == 101 || IDStatus == 102 || IDStatus == 103 || IDStatus == 110 || IDStatus == 111 || IDStatus == 112 || IDStatus == 115) {
+            this.env.showTranslateMessage('Cannot generate invoice with this orders status', 'warning');
             return;
         }
 
@@ -857,13 +873,13 @@ export class SaleOrderDetailPage extends PageBase {
         });
 
         if (ids.length = 0) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-create-already','warning');
+            this.env.showTranslateMessage('Your chosen orders have their invoices generated. Please check again!', 'warning');
         }
         else {
 
             this.EInvoiceServiceProvider.CreateARInvoiceFromSOs(ids).then((resp: any) => {
                 console.log(resp)
-                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.invoice-complete','success');
+                this.env.showTranslateMessage('Invoice created!', 'success');
             })
         }
 
@@ -881,7 +897,7 @@ export class SaleOrderDetailPage extends PageBase {
         // this.refresh();
     }
 
-    closeOrder(){
-        this.nav('sale-order/close-order/'+ this.item.Id);
+    closeOrder() {
+        this.nav('sale-order/close-order/' + this.item.Id);
     }
 }

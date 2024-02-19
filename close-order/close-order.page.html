@@ -124,7 +124,7 @@
 												[items]="g.controls._IDItemDataSource.value.items$ | async" 
 												[typeahead]="g.controls._IDItemDataSource.value.input$" 
 												[loading]="g.controls._IDItemDataSource.value.loading" 
-												placeholder="{{'erp.app.pages.product.bill-of-material.item-placeholder' | translate}}">
+												placeholder="{{'Search for name or product code' | translate}}">
 													<ng-template ng-label-tmp let-i="item">
 														<b *ngIf="i.Code" [title]="i.Id">
 															{{i.Code}}
@@ -185,7 +185,7 @@
 
 
 								<div class="col-id cell" (click)="addOrderLine({   })" *ngIf="pageConfig.canEdit">
-									<ion-icon  class="min-btn" title="{{'erp.app.pages.product.bill-of-material.add-order-line' | translate}}" name="add-circle-outline"></ion-icon>
+									<ion-icon  class="min-btn" title="{{'Add product' | translate}}" name="add-circle-outline"></ion-icon>
 								</div>
 								
 								

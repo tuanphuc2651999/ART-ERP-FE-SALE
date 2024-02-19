@@ -115,7 +115,7 @@ export class SaleOrderMobilePage extends PageBase {
     async splitSaleOrder() {
         let IDStatus = this.selectedItems[0].IDStatus;
         if (!(IDStatus == 101 || IDStatus == 102 || IDStatus == 103)) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-split','warning');
+            this.env.showTranslateMessage('Your selected order cannot be split. Please choose draft, new, pending for approval or disaaproved order','warning');
             return;
         }
         const modal = await this.modalController.create({
@@ -134,7 +134,7 @@ export class SaleOrderMobilePage extends PageBase {
     async mergeSaleOrders() {
         let itemsCanNotProcess = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102 || i.IDStatus == 103));
         if (itemsCanNotProcess.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-merge','warning');
+            this.env.showTranslateMessage('Your selected invoices cannot be combined. Please select new or disapproved invoice','warning');
             return;
         }
 
@@ -183,7 +183,7 @@ export class SaleOrderMobilePage extends PageBase {
                                     if (publishEventCode) {
                                         this.env.publishEvent({ Code: publishEventCode });
                                     }
-                                    this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                                    this.env.showTranslateMessage('Saving completed!','success');
                                     this.submitAttempt = false;
 
                                 }).catch(err => {
@@ -204,7 +204,7 @@ export class SaleOrderMobilePage extends PageBase {
     deleteItems() {
         let itemsCanNotDelete = this.selectedItems.filter(i => !(i.IDStatus == 101 || i.IDStatus == 102));
         if (itemsCanNotDelete.length == this.selectedItems.length) {
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-delete-new-disapprove-only','warning');
+            this.env.showTranslateMessage('Your selected invoices cannot be deleted. Please only delete new or disapproved invoice','warning');
         }
         else if (itemsCanNotDelete.length) {
             this.alertCtrl.create({
@@ -244,7 +244,7 @@ export class SaleOrderMobilePage extends PageBase {
     translateResult;
     currentPopover = null;
     async presentPopover(ev: any) {
-        this.translate.get('erp.app.pages.sale.sale-order-mobile.date-range-label').subscribe((message: string) => {
+        this.translate.get('date-range-label').subscribe((message: string) => {
             this.translateResult = message;
         });
         let popover = await this.popoverCtrl.create({
@@ -307,7 +307,7 @@ export class SaleOrderMobilePage extends PageBase {
     scanning = false;
     scanQRCode() {
         if (!Capacitor.isPluginAvailable('BarcodeScanner') || Capacitor.platform == 'web'){
-            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.mobile-only','warning');
+            this.env.showTranslateMessage('This function is only available on phone','warning');
             return;
         }
         BarcodeScanner.prepare().then(() => {
@@ -323,20 +323,27 @@ export class SaleOrderMobilePage extends PageBase {
                             close.click();
                         }
 
-                        if (result.content.indexOf('O:') == 0) {
-                            //text = text.replace('O:', '');
-                            //this.navCtrl.navigateForward('/delivery/' + text);
-                            this.query.CustomerName = result.content;
-                            setTimeout(() => {
-                                if (close) {
-                                    close.click();
-                                }
-                                this.refresh();
-                            }, 0);
-                        } else {
-                            this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.scanning-with-value','', result.content);
+                        let IDSaleOrder = '';
+                        if (result.content.indexOf('O:') == 0 || result.content.indexOf('000201') == 0) {
+                            if (result.content.indexOf('O:') == 0) {
+                                IDSaleOrder = result.content.replace('O:', '');
+                                
+                            }
+                            else{
+                                let qrContent = lib.readVietQRCode(result.content);
+                                IDSaleOrder = qrContent.message.replace('SO', '');
+                            }   
+                            
+                        }
+                        if (IDSaleOrder) {
+                            this.navCtrl.navigateForward('/delivery/' + IDSaleOrder);
+                            this.closeCamera();
+                        }
+                        else {
+                            this.env.showTranslateMessage('You just scanned: {{value}}, please scanned QR code on paid delivery notes','', result.content);
                             setTimeout(() => this.scanQRCode(), 0);
                         }
+
                     })
                 }
                 else {

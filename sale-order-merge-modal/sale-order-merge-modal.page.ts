@@ -115,7 +115,7 @@ export class SaleOrderMergeModalPage extends PageBase {
 
         return new Promise((resolve, reject) => {
             if (!this.item.Ids.length || !this.item.IDContact) {
-                this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.check-merge-invoice-select-customer','warning');
+                this.env.showTranslateMessage('Please check the invoice to combine and select customer','warning');
             }
             else if (this.submitAttempt == false) {
                 this.submitAttempt = true;
@@ -129,13 +129,13 @@ export class SaleOrderMergeModalPage extends PageBase {
                         if (publishEventCode) {
                             this.env.publishEvent({ Code: publishEventCode });
                         }
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.save-complete','success');
+                        this.env.showTranslateMessage('Saving completed!','success');
                         resolve(savedItem.Id);
                         this.submitAttempt = false;
                         this.closeModal();
 
                     }).catch(err => {
-                        this.env.showTranslateMessage('erp.app.pages.sale.sale-order.message.can-not-save','danger');
+                        this.env.showTranslateMessage('Cannot save, please try again','danger');
                         this.cdr.detectChanges();
                         this.submitAttempt = false;
                         reject(err);

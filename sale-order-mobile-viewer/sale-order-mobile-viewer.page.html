@@ -59,13 +59,13 @@
 
 
                         <div class="field ion-text-center" *ngIf="i.ShippedQuantity && i.OriginalDiscount1 && i.ShippedQuantity != i.Quantity">
-                            <ion-badge color="warning"> {{'erp.app.pages.sale.sale-order-mobile.discount-from-vendor' | translate}}: {{i.Discount1Text}} </ion-badge>
+                            <ion-badge color="warning"> {{'Vendor discount' | translate}}: {{i.Discount1Text}} </ion-badge>
                         </div>
                         <ion-input class="txtTienInput txtCKInput" *ngIf="!item.DA_GIAO_HANG && i.ShippedQuantity && i.OriginalDiscount1 && i.ShippedQuantity != i.Quantity" slot="start" type="number" [(ngModel)]="i.Discount1" min="0"></ion-input>
 
 
                         <div class="field ion-text-center" *ngIf="i.ShippedQuantity && i.OriginalDiscount2 && i.ShippedQuantity != i.Quantity">
-                            <ion-badge color="warning"> {{'erp.app.pages.sale.sale-order-mobile.discount-from-distributor' | translate}}: {{i.Discount2Text}} </ion-badge>
+                            <ion-badge color="warning"> {{'Distributor discount' | translate}}: {{i.Discount2Text}} </ion-badge>
                         </div>
                         <ion-input class="txtTienInput txtCKInput" *ngIf="!item.DA_GIAO_HANG && i.ShippedQuantity && i.OriginalDiscount2 && i.ShippedQuantity != i.Quantity" slot="start" type="number" [(ngModel)]="i.Discount2" min="0"></ion-input>
 
@@ -82,7 +82,7 @@
                     <!-- Tình trạng & Ghi chú -->
                     <ion-card-content class="info barcode" *ngIf="item.Remark" >
                         <ion-item>
-                            <ion-label position="stacked">{{'erp.app.pages.sale.sale-order-mobile.remark' | translate}}</ion-label>
+                            <ion-label position="stacked">{{'Remark' | translate}}</ion-label>
                             <span>
                                 {{item.Remark}}
                             </span>

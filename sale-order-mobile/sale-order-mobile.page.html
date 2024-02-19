@@ -1,5 +1,5 @@
 <ion-header>
-	<app-list-toolbar [NoBorder]="pageConfig.isShowSearch" selectedTitle="{{selectedItems.length}} đơn" pageTitle="{{'erp.app.pages.sale.sale-order-mobile.page-title' | translate}}" [ShowArchive]="false" [ShowExport]="false" [ShowImport]="false" [ShowHelp]="false" [ShowFeature]="false" [ShowRefresh]="false" [ShowAdd]="false" [ShowPopover]="true" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)" (mergeOrders)="mergeSaleOrders()" (splitOrder)="splitSaleOrder()" (submitOrdersForApproval)="submitOrdersForApproval()" (presentPopover)="presentPopover($event)"></app-list-toolbar>
+	<app-list-toolbar [NoBorder]="pageConfig.isShowSearch" selectedTitle="{{selectedItems.length}} đơn" pageTitle="{{'Order' | translate}}" [ShowArchive]="false" [ShowExport]="false" [ShowImport]="false" [ShowHelp]="false" [ShowFeature]="false" [ShowRefresh]="false" [ShowAdd]="false" [ShowPopover]="true" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)" (mergeOrders)="mergeSaleOrders()" (splitOrder)="splitSaleOrder()" (submitOrdersForApproval)="submitOrdersForApproval()" (presentPopover)="presentPopover($event)"></app-list-toolbar>
 
 
 
@@ -12,7 +12,7 @@
 		<!-- <span class="header-icon ">
 			<ion-icon name="qr-code-outline"></ion-icon>
 		</span> -->
-		<ion-searchbar [(ngModel)]="query.CustomerName" (ionChange)="search($event)" placeholder="{{'erp.app.pages.sale.sale-order-mobile.search-placeholder' | translate}}"></ion-searchbar>
+		<ion-searchbar [(ngModel)]="query.CustomerName" (ionChange)="search($event)" placeholder="{{'Search order' | translate}}"></ion-searchbar>
 	</ion-toolbar>
 </ion-header>
 
@@ -103,7 +103,7 @@
 								<ion-icon slot="start" name="call" color="danger"></ion-icon>
 								{{i.WorkPhone}}
 							</ion-button>
-							<ion-button (click)="showDetail(i)" color="secondary" fill="clear" slot="end">{{'erp.app.pages.sale.sale-order-mobile.view-detail' | translate}}
+							<ion-button (click)="showDetail(i)" color="secondary" fill="clear" slot="end">{{'Order details' | translate}}
 							</ion-button>
 						</ion-item>
 
