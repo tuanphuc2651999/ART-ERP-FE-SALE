@@ -336,7 +336,7 @@ export class SaleOrderMobilePage extends PageBase {
                             
                         }
                         if (IDSaleOrder) {
-                            this.navCtrl.navigateForward('/delivery/' + IDSaleOrder);
+                            this.query.CustomerName = IDSaleOrder;
                             this.closeCamera();
                         }
                         else {
