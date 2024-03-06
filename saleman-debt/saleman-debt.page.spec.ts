@@ -10,7 +10,7 @@ describe('SalemanDebtPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SalemanDebtPage],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SalemanDebtPage);

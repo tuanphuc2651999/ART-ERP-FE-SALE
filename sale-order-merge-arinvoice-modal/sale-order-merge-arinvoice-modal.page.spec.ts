@@ -9,10 +9,9 @@ describe('SaleOrderMergeModalPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SaleOrderMergeARInvoiceModalPage ],
+      declarations: [SaleOrderMergeARInvoiceModalPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

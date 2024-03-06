@@ -9,8 +9,8 @@ describe('SaleOrderMobileAddContactModalPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SaleOrderMobileAddContactModalPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [SaleOrderMobileAddContactModalPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SaleOrderMobileAddContactModalPage);

@@ -10,7 +10,7 @@ describe('ReceivableDebtPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ReceivableDebtPage],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReceivableDebtPage);

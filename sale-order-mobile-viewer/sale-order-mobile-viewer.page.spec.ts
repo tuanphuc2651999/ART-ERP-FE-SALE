@@ -9,10 +9,9 @@ describe('SaleOrderMobileViewerPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SaleOrderMobileViewerPage ],
+      declarations: [SaleOrderMobileViewerPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -9,10 +9,9 @@ describe('SaleOrderARInvoiceModalPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SaleOrderARInvoiceModalPage ],
+      declarations: [SaleOrderARInvoiceModalPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

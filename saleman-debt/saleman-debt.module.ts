@@ -15,8 +15,8 @@ import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 
     NgOptionHighlightModule,
     ShareModule,
-    RouterModule.forChild([{ path: '', component: SalemanDebtPage }])
+    RouterModule.forChild([{ path: '', component: SalemanDebtPage }]),
   ],
-  declarations: [SalemanDebtPage]
+  declarations: [SalemanDebtPage],
 })
 export class SalemanDebtPageModule {}
